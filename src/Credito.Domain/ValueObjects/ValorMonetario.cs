@@ -4,25 +4,19 @@ using System.Linq;
 
 namespace Credito.Domain.ValueObjects
 {
-    public record ValorMonetario : IComparable<ValorMonetario>
+    public record ValorMonetario : ValueFromDecimal
     {
         protected const string SIMBOLO_MOEDA = "R$";
 
-        protected readonly decimal _valor;
-
-        internal ValorMonetario(decimal valor) =>
-            _valor = valor;
-
-        public decimal ToDecimal() =>
-            _valor;
+        internal ValorMonetario(decimal valor) : base(valor)
+        {
+            
+        }
 
         public override string ToString() =>
             $"{SIMBOLO_MOEDA} {_valor:#,###.00}";
 
-        public int CompareTo(ValorMonetario other) =>
-            _valor.CompareTo(other._valor);
-
-        public static ValorMonetario FromDecimal(decimal valor) =>
+        public new static ValorMonetario FromDecimal(decimal valor) =>
             new ValorMonetario(valor);
 
         public static implicit operator ValorMonetario(decimal valor) => 
