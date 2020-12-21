@@ -17,6 +17,15 @@ namespace Credito.Domain.Tests.ValueObjects
                 new object[] { -71.97M }
             };
 
+        public static IEnumerable<object[]> DadosParaAplicarPercentual =>
+            new List<object[]>
+            {
+                new object[] { 100.00M, 25.20M, 25.20M },
+                new object[] { 49.97M, 10.00M, 4.997M },
+                new object[] { -50.62M, 10.00M, -5.062M },
+                new object[] { -71.97M, -10.00M, 7.197M }
+            };
+
         public static IEnumerable<object[]> ListaDeDadosSomatorio =>
             new List<object[]>
             {
@@ -66,6 +75,13 @@ namespace Credito.Domain.Tests.ValueObjects
             decimal percentual = Percentual.FromDecimal(valor).ToDecimal();
 
             Assert.Equal(valor, percentual);
+        }
+
+        [Theory]
+        [MemberData(nameof(DadosParaAplicarPercentual))]
+        public void Aplicar_percentual(decimal valor, decimal percentual, decimal resultado)
+        {
+            Assert.Equal(resultado, Percentual.FromDecimal(percentual).Aplicar(valor));
         }
 
         [Theory]
