@@ -17,5 +17,20 @@ namespace Credito.Domain.ValueObjects
 
         public int CompareTo(ValueFromDecimal other) =>
             _valor.CompareTo(other._valor);
+
+        public static decimal operator +(ValueFromDecimal v1, ValueFromDecimal v2) =>
+            v1._valor + v2._valor;
+
+        public static decimal operator -(ValueFromDecimal v1, ValueFromDecimal v2) =>
+            v1._valor - v2._valor;
+
+        public static decimal operator *(ValueFromDecimal v1, ValueFromDecimal v2) =>
+            v1._valor * v2._valor;
+
+        public static decimal operator +(decimal v1, ValueFromDecimal v2) =>
+            v1 + v2._valor;
+
+        public static decimal operator *(decimal v1, ValueFromDecimal v2) =>
+            v1 * v2._valor;
     }
 }

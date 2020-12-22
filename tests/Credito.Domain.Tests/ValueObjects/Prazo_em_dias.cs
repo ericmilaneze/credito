@@ -45,25 +45,25 @@ namespace Credito.Domain.Tests.ValueObjects
         [MemberData(nameof(DadosDeConversaoOuCriacao))]
         public void Criar_prazo_em_dias_de_int(int valor)
         {
-            var prazo = PrazoEmDias.FromInt(valor);
+            var prazo = Prazo.FromInt(valor);
 
-            Assert.Equal(new PrazoEmDias(valor), prazo);
+            Assert.Equal(new Prazo(valor), prazo);
         }
 
         [Theory]
         [MemberData(nameof(DadosDeConversaoOuCriacao))]
         public void Criar_prazo_em_dias_de_int_implicitamente(int valor)
         {
-            PrazoEmDias prazo = valor;
+            Prazo prazo = valor;
 
-            Assert.Equal(new PrazoEmDias(valor), prazo);
+            Assert.Equal(new Prazo(valor), prazo);
         }
 
         [Theory]
         [MemberData(nameof(DadosDeConversaoOuCriacaoNegativo))]
         public void Criar_prazo_em_dias_de_int_negativo(int valor)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => PrazoEmDias.FromInt(valor));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Prazo.FromInt(valor));
         }
 
         [Theory]
@@ -77,7 +77,7 @@ namespace Credito.Domain.Tests.ValueObjects
         [MemberData(nameof(DadosDeConversaoOuCriacao))]
         public void Prazo_em_dias_para_int(int valor)
         {
-            int prazo = PrazoEmDias.FromInt(valor).ToInt();
+            int prazo = Prazo.FromInt(valor).ToInt();
 
             Assert.Equal(valor, prazo);
         }
@@ -89,12 +89,12 @@ namespace Credito.Domain.Tests.ValueObjects
             var valores = 
                 new Collection<int>()
                 {
-                    new PrazoEmDias(valor1).ToInt(),
-                    new PrazoEmDias(valor2).ToInt(),
-                    new PrazoEmDias(valor3).ToInt()
+                    new Prazo(valor1).ToInt(),
+                    new Prazo(valor2).ToInt(),
+                    new Prazo(valor3).ToInt()
                 };
 
-            Assert.Equal(new PrazoEmDias(resultado), valores.Sum());
+            Assert.Equal(new Prazo(resultado), valores.Sum());
         }
 
         [Theory]
@@ -102,14 +102,14 @@ namespace Credito.Domain.Tests.ValueObjects
         public void Somatorio_de_prazo_em_dias(int valor1, int valor2, int valor3, int resultado)
         {
             var valores = 
-                new Collection<PrazoEmDias>()
+                new Collection<Prazo>()
                 {
-                    new PrazoEmDias(valor1),
-                    new PrazoEmDias(valor2),
-                    new PrazoEmDias(valor3)
+                    new Prazo(valor1),
+                    new Prazo(valor2),
+                    new Prazo(valor3)
                 };
 
-            Assert.Equal(new PrazoEmDias(resultado), valores.Sum());
+            Assert.Equal(new Prazo(resultado), valores.Sum());
         }
 
         [Theory]
@@ -117,14 +117,14 @@ namespace Credito.Domain.Tests.ValueObjects
         public void Minimo_de_prazo_em_dias(int valor1, int valor2, int valor3, int resultado)
         {
             var valores = 
-                new Collection<PrazoEmDias>()
+                new Collection<Prazo>()
                 {
-                    new PrazoEmDias(valor1),
-                    new PrazoEmDias(valor2),
-                    new PrazoEmDias(valor3)
+                    new Prazo(valor1),
+                    new Prazo(valor2),
+                    new Prazo(valor3)
                 };
 
-            Assert.Equal(new PrazoEmDias(resultado), valores.Min());
+            Assert.Equal(new Prazo(resultado), valores.Min());
         }
 
         [Theory]
@@ -132,14 +132,14 @@ namespace Credito.Domain.Tests.ValueObjects
         public void Maximo_de_prazo_em_dias(int valor1, int valor2, int valor3, int resultado)
         {
             var valores = 
-                new Collection<PrazoEmDias>()
+                new Collection<Prazo>()
                 {
-                    new PrazoEmDias(valor1),
-                    new PrazoEmDias(valor2),
-                    new PrazoEmDias(valor3)
+                    new Prazo(valor1),
+                    new Prazo(valor2),
+                    new Prazo(valor3)
                 };
 
-            Assert.Equal(new PrazoEmDias(resultado), valores.Max());
+            Assert.Equal(new Prazo(resultado), valores.Max());
         }
     }
 }
