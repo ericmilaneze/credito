@@ -14,6 +14,7 @@ namespace Credito.Domain.ContratoDeEmprestimo
         public record ParametrosDeContratoDeEmprestimo
         {
             public ValorMonetarioPositivo ValorLiquido { get; init; }
+            //public Prazo MyProperty { get; init; }
         }
     }
 }

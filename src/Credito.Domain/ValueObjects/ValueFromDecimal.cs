@@ -2,7 +2,7 @@ using System;
 
 namespace Credito.Domain.ValueObjects
 {
-    public record ValueFromDecimal : IComparable<ValueFromDecimal>
+    public abstract record ValueFromDecimal : IComparable<ValueFromDecimal>
     {
         protected decimal _valor;
 
@@ -17,11 +17,5 @@ namespace Credito.Domain.ValueObjects
 
         public int CompareTo(ValueFromDecimal other) =>
             _valor.CompareTo(other._valor);
-
-        public static ValueFromDecimal FromDecimal(decimal valor) =>
-            new ValueFromDecimal(valor);
-
-        public static implicit operator ValueFromDecimal(decimal valor) => 
-            FromDecimal(valor);
     }
 }

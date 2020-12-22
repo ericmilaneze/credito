@@ -15,7 +15,7 @@ namespace Credito.Domain.ValueObjects
         public override string ToString() =>
             $"{_valor:#,###.00}%";
 
-        public new static Percentual FromDecimal(decimal valor) =>
+        public static Percentual FromDecimal(decimal valor) =>
             new Percentual(valor);
 
         public static implicit operator Percentual(decimal valor) => 

@@ -15,7 +15,7 @@ namespace Credito.Domain.ValueObjects
         public new static ValorMonetarioPositivo FromDecimal(decimal valor)
         {
             if (valor <= 0.00M)
-                throw new ArgumentOutOfRangeException(nameof(valor), valor, "Valor não pode ser menor ou igual a zero.");
+                throw new ArgumentOutOfRangeException(nameof(valor), valor, "Valor monetário não pode ser menor ou igual a zero.");
 
             return new ValorMonetarioPositivo(valor);
         }

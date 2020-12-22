@@ -16,7 +16,7 @@ namespace Credito.Domain.ValueObjects
         public override string ToString() =>
             $"{SIMBOLO_MOEDA} {_valor:#,###.00}";
 
-        public new static ValorMonetario FromDecimal(decimal valor) =>
+        public static ValorMonetario FromDecimal(decimal valor) =>
             new ValorMonetario(valor);
 
         public static implicit operator ValorMonetario(decimal valor) => 
