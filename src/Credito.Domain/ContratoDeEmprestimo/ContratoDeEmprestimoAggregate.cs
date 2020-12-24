@@ -6,7 +6,7 @@ using Credito.Domain.Common.ValueObjects;
 
 namespace Credito.Domain.ContratoDeEmprestimo
 {
-    public class ContratoDeEmprestimoAggragate
+    public class ContratoDeEmprestimoAggregate
     {
         private ICollection<Parcela> parcelas = new Collection<Parcela>();
 
@@ -39,7 +39,7 @@ namespace Credito.Domain.ContratoDeEmprestimo
             }
         }
 
-        private ContratoDeEmprestimoAggragate(ParametrosDeContratoDeEmprestimo parametros)
+        private ContratoDeEmprestimoAggregate(ParametrosDeContratoDeEmprestimo parametros)
         {
             Id = parametros.Id;
             ValorLiquido = parametros.ValorLiquido;
@@ -50,9 +50,9 @@ namespace Credito.Domain.ContratoDeEmprestimo
             DiasDeCarencia = parametros.DiasDeCarencia;
         }
 
-        public static ContratoDeEmprestimoAggragate CriarContrato(ParametrosDeContratoDeEmprestimo parametros)
+        public static ContratoDeEmprestimoAggregate CriarContrato(ParametrosDeContratoDeEmprestimo parametros)
         {
-            var contrato = new ContratoDeEmprestimoAggragate(parametros);
+            var contrato = new ContratoDeEmprestimoAggregate(parametros);
             contrato.GerarParcelas();
             return contrato;
         }

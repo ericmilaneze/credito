@@ -2,7 +2,7 @@ using Credito.Domain.ContratoDeEmprestimo;
 using Credito.Domain.Tests.DataAttributes;
 using Credito.Domain.Common.ValueObjects;
 using Xunit;
-using static Credito.Domain.ContratoDeEmprestimo.ContratoDeEmprestimoAggragate;
+using static Credito.Domain.ContratoDeEmprestimo.ContratoDeEmprestimoAggregate;
 using System;
 
 namespace Credito.Domain.Tests.ContratoDeEmprestimo
@@ -13,7 +13,7 @@ namespace Credito.Domain.Tests.ContratoDeEmprestimo
         [ContratosDataAttribute("contratos.json")]
         public void Criar_contrato(ContratoData data)
         {
-            var contrato = ContratoDeEmprestimoAggragate.CriarContrato(
+            var contrato = ContratoDeEmprestimoAggregate.CriarContrato(
                 new ParametrosDeContratoDeEmprestimo
                 {
                     Id = Guid.NewGuid(),
