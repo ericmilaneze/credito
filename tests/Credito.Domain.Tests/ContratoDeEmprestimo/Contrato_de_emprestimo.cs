@@ -3,6 +3,7 @@ using Credito.Domain.Tests.DataAttributes;
 using Credito.Domain.Common.ValueObjects;
 using Xunit;
 using static Credito.Domain.ContratoDeEmprestimo.ContratoDeEmprestimoAggragate;
+using System;
 
 namespace Credito.Domain.Tests.ContratoDeEmprestimo
 {
@@ -15,6 +16,7 @@ namespace Credito.Domain.Tests.ContratoDeEmprestimo
             var contrato = ContratoDeEmprestimoAggragate.CriarContrato(
                 new ParametrosDeContratoDeEmprestimo
                 {
+                    Id = Guid.NewGuid(),
                     ValorLiquido = data.ValorLiquido,
                     Prazo = data.Prazo,
                     TaxaAoMes = data.TaxaAoMes,

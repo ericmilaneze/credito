@@ -10,7 +10,7 @@ namespace Credito.Domain.ContratoDeEmprestimo
     {
         private ICollection<Parcela> parcelas = new Collection<Parcela>();
 
-        public Guid Id { get; }
+        public Guid Id { get; } = Guid.NewGuid();
         public ValorMonetarioPositivo ValorLiquido { get; }
         public Prazo QuantidadeDeParcelas { get; }
         public PercentualPositivo TaxaAoMes { get; }
