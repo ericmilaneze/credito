@@ -1,30 +1,33 @@
 using Credito.Domain.ContratoDeEmprestimo;
+using Credito.Domain.Tests.DataAttributes;
 using Credito.Domain.ValueObjects;
 using Xunit;
-using static Credito.Domain.ContratoDeEmprestimo.ContratoDeEmprestimoAggragateRoot;
+using static Credito.Domain.ContratoDeEmprestimo.ContratoDeEmprestimoAggragate;
 
 namespace Credito.Domain.Tests.ContratoDeEmprestimo
 {
     public class Contrato_de_emprestimo
     {
-        [Fact]
-        public void Criar_contrato()
+        [Theory]
+        [ContratosDataAttribute("contratos.json")]
+        public void Criar_contrato(ContratoData data)
         {
-            var contrato = ContratoDeEmprestimoAggragateRoot.CriarContrato(
+            var contrato = ContratoDeEmprestimoAggragate.CriarContrato(
                 new ParametrosDeContratoDeEmprestimo
                 {
-                    ValorLiquido = 3000M,
-                    Prazo = 24,
-                    TaxaAoMes = 5.00M,
-                    Tac = 6.00M,
-                    Iof = 10.00M,
-                    DiasDeCarencia = 30
+                    ValorLiquido = data.ValorLiquido,
+                    Prazo = data.Prazo,
+                    TaxaAoMes = data.TaxaAoMes,
+                    Tac = data.Tac,
+                    Iof = data.Iof,
+                    DiasDeCarencia = data.DiasDeCarencia
                 });
 
-            Assert.Equal(new Percentual(0.16276620118331753M), contrato.TaxaAoDia);
-            Assert.Equal(new ValorMonetario(146.4895810649857770000M), contrato.ValorCarencia);
-            Assert.Equal(new ValorMonetario(3190.00M), contrato.ValorFinanciado);
-            Assert.Equal(new ValorMonetario(231.18217340107145820781457680M), contrato.ValorDaParcela);
+            Assert.Equal(new Percentual(data.TaxaAoDia), contrato.TaxaAoDia);
+            Assert.Equal(new ValorMonetario(data.ValorCarencia), contrato.ValorCarencia);
+            Assert.Equal(new ValorMonetario(data.ValorFinanciado), contrato.ValorFinanciado);
+            Assert.Equal(new ValorMonetario(data.ValorDaParcela), contrato.ValorDaParcela);
+            Assert.All(contrato.Parcelas, p => data.Parcelas.Contains(p));
         }
     }
 }

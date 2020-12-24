@@ -24,4 +24,8 @@
     <ProjectReference Include="..\..\src\Credito.Domain\Credito.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="contratos.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

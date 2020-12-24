@@ -25,5 +25,8 @@ namespace Credito.Domain.ValueObjects
 
         public static implicit operator NumeroParcela(int valor) => 
             FromInt(valor);
+
+        public static implicit operator NumeroParcela(long valor) => 
+            FromInt((int)valor);
     }
 }

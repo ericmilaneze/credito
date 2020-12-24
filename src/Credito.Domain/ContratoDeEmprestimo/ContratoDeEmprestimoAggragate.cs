@@ -6,11 +6,11 @@ using Credito.Domain.ValueObjects;
 
 namespace Credito.Domain.ContratoDeEmprestimo
 {
-    public class ContratoDeEmprestimoAggragateRoot
+    public class ContratoDeEmprestimoAggragate
     {
         private ICollection<Parcela> parcelas = new Collection<Parcela>();
 
-        public string Id { get; }
+        public Guid Id { get; }
         public ValorMonetarioPositivo ValorLiquido { get; }
         public Prazo QuantidadeDeParcelas { get; }
         public PercentualPositivo TaxaAoMes { get; }
@@ -39,8 +39,9 @@ namespace Credito.Domain.ContratoDeEmprestimo
             }
         }
 
-        private ContratoDeEmprestimoAggragateRoot(ParametrosDeContratoDeEmprestimo parametros)
+        private ContratoDeEmprestimoAggragate(ParametrosDeContratoDeEmprestimo parametros)
         {
+            Id = parametros.Id;
             ValorLiquido = parametros.ValorLiquido;
             QuantidadeDeParcelas = parametros.Prazo;
             TaxaAoMes = parametros.TaxaAoMes;
@@ -49,14 +50,14 @@ namespace Credito.Domain.ContratoDeEmprestimo
             DiasDeCarencia = parametros.DiasDeCarencia;
         }
 
-        public static ContratoDeEmprestimoAggragateRoot CriarContrato(ParametrosDeContratoDeEmprestimo parametros)
+        public static ContratoDeEmprestimoAggragate CriarContrato(ParametrosDeContratoDeEmprestimo parametros)
         {
-            var contrato = new ContratoDeEmprestimoAggragateRoot(parametros);
+            var contrato = new ContratoDeEmprestimoAggragate(parametros);
             contrato.GerarParcelas();
             return contrato;
         }
 
-        public void GerarParcelas()
+        private void GerarParcelas()
         {
             for (int i = 1; i <= QuantidadeDeParcelas.ToInt(); i++)
                 AdicionarParcela(i);
@@ -93,7 +94,7 @@ namespace Credito.Domain.ContratoDeEmprestimo
 
         public record ParametrosDeContratoDeEmprestimo
         {
-            public string Id { get; init; }
+            public Guid Id { get; init; }
             public ValorMonetarioPositivo ValorLiquido { get; init; }
             public Prazo Prazo { get; init; }
             public PercentualPositivo TaxaAoMes { get; init; }

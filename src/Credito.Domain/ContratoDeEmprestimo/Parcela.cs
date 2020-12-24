@@ -2,7 +2,7 @@ using Credito.Domain.ValueObjects;
 
 namespace Credito.Domain.ContratoDeEmprestimo
 {
-    public class Parcela
+    public record Parcela
     {
         public NumeroParcela Numero { get; init; }
         public ValorMonetario SaldoDevedorInicial { get; init; }

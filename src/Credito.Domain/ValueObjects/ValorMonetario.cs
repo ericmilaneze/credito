@@ -21,5 +21,8 @@ namespace Credito.Domain.ValueObjects
 
         public static implicit operator ValorMonetario(decimal valor) => 
             FromDecimal(valor);
+
+        public static implicit operator ValorMonetario(double valor) => 
+            FromDecimal((decimal)valor);
     }
 }
