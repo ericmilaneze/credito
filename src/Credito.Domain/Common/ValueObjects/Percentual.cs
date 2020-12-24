@@ -1,6 +1,6 @@
 using System;
 
-namespace Credito.Domain.ValueObjects
+namespace Credito.Domain.Common.ValueObjects
 {
     public record Percentual : ValueFromDecimal
     {

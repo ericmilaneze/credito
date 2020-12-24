@@ -1,6 +1,6 @@
 using Credito.Domain.ContratoDeEmprestimo;
 using Credito.Domain.Tests.DataAttributes;
-using Credito.Domain.ValueObjects;
+using Credito.Domain.Common.ValueObjects;
 using Xunit;
 using static Credito.Domain.ContratoDeEmprestimo.ContratoDeEmprestimoAggragate;
 

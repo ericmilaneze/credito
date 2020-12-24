@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Credito.Domain.ValueObjects;
+using Credito.Domain.Common.ValueObjects;
 using Xunit;
 
 namespace Credito.Domain.Tests.ValueObjects

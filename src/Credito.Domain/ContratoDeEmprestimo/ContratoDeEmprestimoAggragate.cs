@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Credito.Domain.ValueObjects;
+using Credito.Domain.Common.ValueObjects;
 
 namespace Credito.Domain.ContratoDeEmprestimo
 {
@@ -59,8 +59,8 @@ namespace Credito.Domain.ContratoDeEmprestimo
 
         private void GerarParcelas()
         {
-            for (int i = 1; i <= QuantidadeDeParcelas.ToInt(); i++)
-                AdicionarParcela(i);
+            for (int numeroParcela = 1; numeroParcela <= QuantidadeDeParcelas.ToInt(); numeroParcela++)
+                AdicionarParcela(numeroParcela);
         }
 
         private void AdicionarParcela(NumeroParcela numeroDaParcela)

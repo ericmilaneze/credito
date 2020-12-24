@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Credito.Domain.ValueObjects
+namespace Credito.Domain.Common.ValueObjects
 {
-    public static class ValueFromDecimalExtensions
+    public static class ValueFromIntExtensions
     {
-        public static T Sum<T>(this IEnumerable<T> source) where T : ValueFromDecimal
+        public static T Sum<T>(this IEnumerable<T> source) where T : ValueFromInt
         {
-            decimal sum = 0M;
+            int sum = 0;
             checked {
-                foreach (decimal v in source?.Select(v => v?.ToDecimal() ?? default(decimal)) ?? Enumerable.Empty<decimal>())
+                foreach (int v in source?.Select(v => v?.ToInt() ?? default(int)) ?? Enumerable.Empty<int>())
                     sum += v;
             }
             return (T)Activator.CreateInstance(typeof(T),

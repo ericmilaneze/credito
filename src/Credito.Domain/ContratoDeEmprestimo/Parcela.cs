@@ -1,4 +1,4 @@
-using Credito.Domain.ValueObjects;
+using Credito.Domain.Common.ValueObjects;
 
 namespace Credito.Domain.ContratoDeEmprestimo
 {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Credito.Domain.ValueObjects
+namespace Credito.Domain.Common.ValueObjects
 {
     public record ValorMonetario : ValueFromDecimal
     {
