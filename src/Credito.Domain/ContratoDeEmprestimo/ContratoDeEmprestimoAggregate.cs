@@ -65,19 +65,9 @@ namespace Credito.Domain.ContratoDeEmprestimo
 
         private void AdicionarParcela(NumeroParcela numeroDaParcela)
         {
-            var isPrimeiraParcela = numeroDaParcela == 1;
-            var saldoDevedorInicial =
-                isPrimeiraParcela
-                    ? ValorCarencia + ValorFinanciado
-                    : ObterParcela(numeroDaParcela - 1).SaldoDevedorFinal;
-            var juros =
-                isPrimeiraParcela
-                    ? TaxaAoMes.Aplicar(ValorFinanciado)
-                    : TaxaAoMes.Aplicar(saldoDevedorInicial);
-            var principal =
-                isPrimeiraParcela
-                    ? ValorDaParcela - juros + ValorCarencia
-                    : ValorDaParcela - juros;
+            var saldoDevedorInicial = CalcularSaldoDevedorInicial(numeroDaParcela);
+            var juros = CalcularJuros(numeroDaParcela, saldoDevedorInicial);
+            var principal = CalcularPrincipal(numeroDaParcela, juros);
 
             parcelas.Add(new Parcela
             {
@@ -89,7 +79,28 @@ namespace Credito.Domain.ContratoDeEmprestimo
             });
         }
 
-        public Parcela ObterParcela(NumeroParcela numero) =>
+        private ValorMonetario CalcularSaldoDevedorInicial(NumeroParcela numeroDaParcela)
+        {
+            return numeroDaParcela.IsFirst()
+                ? ValorCarencia + ValorFinanciado
+                : ObterParcela(numeroDaParcela - 1).SaldoDevedorFinal;
+        }
+
+        private ValorMonetario CalcularJuros(NumeroParcela numeroDaParcela, ValorMonetario saldoDevedorInicial)
+        {
+            return numeroDaParcela.IsFirst()
+                ? TaxaAoMes.Aplicar(ValorFinanciado)
+                : TaxaAoMes.Aplicar(saldoDevedorInicial);
+        }
+
+        private decimal CalcularPrincipal(NumeroParcela numeroDaParcela, ValorMonetario juros)
+        {
+            return numeroDaParcela.IsFirst()
+                ? ValorDaParcela - juros + ValorCarencia
+                : ValorDaParcela - juros;
+        }
+
+        internal Parcela ObterParcela(NumeroParcela numero) =>
             Parcelas.First(p => p.Numero == numero);
 
         public record ParametrosDeContratoDeEmprestimo
