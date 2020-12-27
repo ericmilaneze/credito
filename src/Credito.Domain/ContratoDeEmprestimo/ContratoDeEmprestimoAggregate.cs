@@ -65,39 +65,35 @@ namespace Credito.Domain.ContratoDeEmprestimo
 
         private void AdicionarParcela(NumeroParcela numeroDaParcela)
         {
-            var saldoDevedorInicial = CalcularSaldoDevedorInicial(numeroDaParcela);
-            var juros = CalcularJuros(numeroDaParcela, saldoDevedorInicial);
-            var principal = CalcularPrincipal(numeroDaParcela, juros);
-
             parcelas.Add(new Parcela
             {
                 Numero = numeroDaParcela,
-                SaldoDevedorInicial = saldoDevedorInicial,
+                SaldoDevedorInicial = CalcularSaldoDevedorInicial(),
                 Valor = ValorDaParcela,
-                Principal = principal,
-                Juros = juros,
+                Principal = CalcularPrincipal(),
+                Juros = CalcularJuros(),
             });
-        }
 
-        private ValorMonetario CalcularSaldoDevedorInicial(NumeroParcela numeroDaParcela)
-        {
-            return numeroDaParcela.IsFirst()
-                ? ValorCarencia + ValorFinanciado
-                : ObterParcela(numeroDaParcela - 1).SaldoDevedorFinal;
-        }
+            ValorMonetario CalcularSaldoDevedorInicial()
+            {
+                return numeroDaParcela.IsFirst()
+                    ? ValorCarencia + ValorFinanciado
+                    : ObterParcela(numeroDaParcela - 1).SaldoDevedorFinal;
+            }
 
-        private ValorMonetario CalcularJuros(NumeroParcela numeroDaParcela, ValorMonetario saldoDevedorInicial)
-        {
-            return numeroDaParcela.IsFirst()
-                ? TaxaAoMes.Aplicar(ValorFinanciado)
-                : TaxaAoMes.Aplicar(saldoDevedorInicial);
-        }
+            ValorMonetario CalcularJuros()
+            {
+                return numeroDaParcela.IsFirst()
+                    ? TaxaAoMes.Aplicar(ValorFinanciado)
+                    : TaxaAoMes.Aplicar(CalcularSaldoDevedorInicial());
+            }
 
-        private decimal CalcularPrincipal(NumeroParcela numeroDaParcela, ValorMonetario juros)
-        {
-            return numeroDaParcela.IsFirst()
-                ? ValorDaParcela - juros + ValorCarencia
-                : ValorDaParcela - juros;
+            decimal CalcularPrincipal()
+            {
+                return numeroDaParcela.IsFirst()
+                    ? ValorDaParcela - CalcularJuros() + ValorCarencia
+                    : ValorDaParcela - CalcularJuros();
+            }
         }
 
         internal Parcela ObterParcela(NumeroParcela numero) =>
