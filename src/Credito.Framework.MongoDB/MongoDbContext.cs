@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Conventions;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
@@ -17,38 +20,49 @@ namespace Credito.Framework.MongoDB
         {
             this.mongoClient = new MongoClient(connectionString);
 
-            BsonSerializer.RegisterSerializer(typeof(Idade), new IdadeSerializer());
+            ConventionRegistry.Register(
+                "Default", 
+                new ConventionPack
+                {
+                    new CamelCaseElementNameConvention(),
+                    new IgnoreIfNullConvention(true),
+                    new EnumRepresentationConvention(BsonType.String)
+                },
+                _ => true);
+            BsonSerializer.RegisterSerializer(new IdadeSerializer());
+            BsonSerializer.RegisterSerializer(new DecimalSerializer(BsonType.Decimal128));
         }
 
-        public void Insert(Aggregate aggregate)
-        {
-            var collection = Database.GetCollection<Aggregate>("aggregates");
-            collection.InsertOne(aggregate);
-        }
+        public IMongoCollection<Aggregate> GetCollection() =>
+            Database.GetCollection<Aggregate>("aggregates");
 
-        public void Update(Aggregate aggregate)
-        {
-            var collection = Database.GetCollection<Aggregate>("aggregates");
-            collection.ReplaceOne(x => x.Id == aggregate.Id, aggregate);
-        }
+        public Aggregate Load(Guid id) =>
+            GetCollection().AsQueryable()
+                           .Where(x => x.Id == id)
+                           .FirstOrDefault();
 
-        public Aggregate Load(Guid id)
-        {
-            var collection = Database.GetCollection<Aggregate>("aggregates");
-            return collection.AsQueryable().Where(x => x.Id == id).FirstOrDefault();
-        }
+        public IList<Aggregate> Find(Expression<Func<Aggregate, bool>> filter,
+                                     int skip = 0,
+                                     int take = 10) =>
+            GetCollection().AsQueryable()
+                           .Where(filter)
+                           .Skip(skip)
+                           .Take(take)
+                           .ToList();
 
-        public Aggregate Remove(Guid id)
-        {
-            var collection = Database.GetCollection<Aggregate>("aggregates");
-            collection.DeleteOne(x => x.Id == id);
-            return collection.AsQueryable().Where(x => x.Id == id).FirstOrDefault();
-        }
+        public IList<Aggregate> Get(int skip = 0, int take = 10) =>
+            GetCollection().AsQueryable()
+                           .Skip(skip)
+                           .Take(take)
+                           .ToList();
 
-        public IList<Aggregate> Find(Expression<Func<Aggregate, bool>> filter)
-        {
-            var collection = Database.GetCollection<Aggregate>("aggregates");
-            return collection.Find(filter).ToList();
-        }
+        public void Insert(Aggregate aggregate) =>
+            GetCollection().InsertOne(aggregate);
+
+        public void Update(Aggregate aggregate) =>
+            GetCollection().ReplaceOne(x => x.Id == aggregate.Id, aggregate);
+
+        public void Remove(Guid id) =>
+            GetCollection().DeleteOne(x => x.Id == id);
     }
 }
