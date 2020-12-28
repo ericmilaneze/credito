@@ -9,7 +9,7 @@ namespace Credito.Domain.ContratoDeEmprestimo
 {
     public class ContratoDeEmprestimoAggregate
     {
-        private ICollection<Parcela> parcelas = new Collection<Parcela>();
+        private ICollection<Parcela> _parcelas = new Collection<Parcela>();
 
         public Guid Id { get; } = Guid.NewGuid();
         public ValorMonetarioPositivo ValorLiquido { get; }
@@ -18,7 +18,7 @@ namespace Credito.Domain.ContratoDeEmprestimo
         public Percentual Tac { get; }
         public ValorMonetario Iof { get; }
         public Prazo DiasDeCarencia { get; }
-        public IReadOnlyCollection<Parcela> Parcelas => parcelas.ToList().AsReadOnly();
+        public IReadOnlyCollection<Parcela> Parcelas => _parcelas.ToList().AsReadOnly();
 
         public Percentual TaxaAoDia =>
             (Math.Pow(decimal.ToDouble(1M + TaxaAoMes), 1D / 30D) - 1) * 100;
@@ -65,7 +65,7 @@ namespace Credito.Domain.ContratoDeEmprestimo
         }
 
         private void AdicionarParcela(NumeroParcela numeroParcela, ICalculadoraDeParcelaStrategy calculadora) =>
-            parcelas.Add(new Parcela
+            _parcelas.Add(new Parcela
             {
                 Numero = numeroParcela,
                 SaldoDevedorInicial = calculadora.CalcularSaldoDevedorInicial(this, numeroParcela),
