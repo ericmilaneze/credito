@@ -1,17 +1,19 @@
 using System;
+using Credito.Domain.Common;
 
 namespace Credito.Framework.MongoDB
 {
-    public class Aggregate
+    public class Aggregate : AggregateRoot
     {
-        public Guid Id { get; }
         public string Nome { get; }
         public Idade Idade { get; }
         public decimal DinheiroNaConta { get; }
 
-        public Aggregate(Guid id, string nome, Idade idade, decimal dinheiroNaConta)
+        public Aggregate(Guid id,
+                         string nome,
+                         Idade idade,
+                         decimal dinheiroNaConta) : base(id)
         {
-            Id = id;
             Nome = nome;
             Idade = idade;
             DinheiroNaConta = dinheiroNaConta;
