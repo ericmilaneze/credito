@@ -1,3 +1,5 @@
+using System;
+using System.Reflection;
 using Credito.Domain.Common.ValueObjects;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
@@ -10,7 +12,12 @@ namespace Credito.Framework.MongoDB.Serializers
         {
             var serializer = BsonSerializer.LookupSerializer(typeof(decimal));
             var data = serializer.Deserialize(context, args);
-            return PercentualPositivo.FromDecimal((decimal)data);
+            return (PercentualPositivo)Activator.CreateInstance(
+                typeof(PercentualPositivo),
+                BindingFlags.Instance | BindingFlags.NonPublic,
+                null,
+                new object[] { (decimal)data },
+                null);
         }
 
         public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, PercentualPositivo value)

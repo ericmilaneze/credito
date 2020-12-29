@@ -10,7 +10,7 @@ using MongoDB.Driver.Linq;
 
 namespace Credito.Framework.MongoDB
 {
-    public class MongoDbRepository
+    public sealed class MongoDbRepository
     {
         private readonly IMongoDatabase _database;
 
