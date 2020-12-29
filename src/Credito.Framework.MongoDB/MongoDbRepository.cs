@@ -4,11 +4,7 @@ using System.Linq.Expressions;
 using Credito.Domain.Common;
 using Credito.Domain.ContratoDeEmprestimo;
 using Credito.Framework.MongoDB.Example;
-using Credito.Framework.MongoDB.Serializers;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
-using MongoDB.Bson.Serialization.Conventions;
-using MongoDB.Bson.Serialization.Serializers;
+using Credito.Framework.MongoDB.Registry;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
@@ -18,84 +14,21 @@ namespace Credito.Framework.MongoDB
     {
         private readonly IMongoDatabase _database;
 
+        static MongoDbRepository()
+        {
+            ConventionsRegistry.RegisterConventions();
+            SerializersRegistry.RegisterSerializers();
+            ClassMapsRegistry.RegisterClassMaps();
+        }
+
         public MongoDbRepository(string connectionString, string dbName)
         {
             var mongoClient = new MongoClient(connectionString);
             _database = mongoClient.GetDatabase(dbName);
-            
-            RegisterConventions();
-            RegisterSerializers();
-            RegisterClassMaps();
-        }
-
-        private void RegisterConventions()
-        {
-            ConventionRegistry.Register("Custom Conventions",
-                                        new ConventionPack
-                                        {
-                                            new CamelCaseElementNameConvention(),
-                                            new IgnoreIfNullConvention(true),
-                                            new EnumRepresentationConvention(BsonType.String)
-                                        },
-                                        _ => true);
-        }
-
-        private void RegisterSerializers()
-        {
-            BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
-            BsonSerializer.RegisterSerializer(new DecimalSerializer(BsonType.Decimal128));
-
-            BsonSerializer.RegisterSerializer(new IdadeExampleSerializer());
-            BsonSerializer.RegisterSerializer(new PercentualPositivoSerializer());
-            BsonSerializer.RegisterSerializer(new PercentualSerializer());
-            BsonSerializer.RegisterSerializer(new PrazoSerializer());
-            BsonSerializer.RegisterSerializer(new ValorMonetarioPositivoSerializer());
-            BsonSerializer.RegisterSerializer(new ValorMonetarioSerializer());
-            BsonSerializer.RegisterSerializer(new NumeroParcelaSerializer());
-        }
-
-        private void RegisterClassMaps()
-        {
-            BsonClassMap.RegisterClassMap<ExampleAggregate>(cm =>
-            {
-                cm.AutoMap();
-                cm.SetIgnoreExtraElements(true);
-            });
-
-            BsonClassMap.RegisterClassMap<ContratoDeEmprestimoAggregate>(cm =>
-            {
-                cm.AutoMap();
-                cm.MapField("_parcelas").SetElementName("parcelas");
-                cm.MapProperty(c => c.TaxaAoDia).SetElementName("taxaAoDia");
-                cm.MapProperty(c => c.ValorCarencia).SetElementName("valorCarencia");
-                cm.MapProperty(c => c.ValorFinanciado).SetElementName("valorFinanciado");
-                cm.MapProperty(c => c.ValorDaParcela).SetElementName("valorDaParcela");
-                cm.SetIgnoreExtraElements(true);
-            });
-
-            BsonClassMap.RegisterClassMap<Parcela>(cm =>
-            {
-                cm.AutoMap();
-                cm.MapField(p => p.SaldoDevedorFinal).SetElementName("saldoDevedorFinal");
-                cm.SetIgnoreExtraElements(true);
-            });
         }
 
         public IMongoCollection<T> GetCollection<T>() =>
-            _database.GetCollection<T>(GetCollectionName<T>());
-
-        public string GetCollectionName<T>()
-        {
-            switch (typeof(T))
-            {
-                case Type t when t == typeof(ExampleAggregate):
-                    return "example_aggregates";
-                case Type t when t == typeof(ContratoDeEmprestimoAggregate):
-                    return "contratos";
-                default:
-                    throw new NotImplementedException($"Collection name not set yet for \"{typeof(T).Name}\"");
-            }
-        }
+            _database.GetCollection<T>(CollectionNamesRegistry.GetCollectionName<T>());
 
         public T Load<T>(Guid id) where T : AggregateRoot =>
             GetCollection<T>().AsQueryable()
