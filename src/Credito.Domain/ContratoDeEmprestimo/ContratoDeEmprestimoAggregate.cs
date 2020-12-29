@@ -2,22 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Credito.Domain.Common;
 using Credito.Domain.Common.ValueObjects;
 using Credito.Domain.ContratoDeEmprestimo.CalculadoraDeParcela;
 
 namespace Credito.Domain.ContratoDeEmprestimo
 {
-    public class ContratoDeEmprestimoAggregate
+    public class ContratoDeEmprestimoAggregate : AggregateRoot
     {
         private ICollection<Parcela> _parcelas = new Collection<Parcela>();
 
-        public Guid Id { get; } = Guid.NewGuid();
-        public ValorMonetarioPositivo ValorLiquido { get; }
-        public Prazo QuantidadeDeParcelas { get; }
-        public PercentualPositivo TaxaAoMes { get; }
-        public Percentual Tac { get; }
-        public ValorMonetario Iof { get; }
-        public Prazo DiasDeCarencia { get; }
+        public ValorMonetarioPositivo ValorLiquido { get; private set; }
+        public Prazo QuantidadeDeParcelas { get; private set; }
+        public PercentualPositivo TaxaAoMes { get; private set; }
+        public Percentual Tac { get; private set; }
+        public ValorMonetario Iof { get; private set; }
+        public Prazo DiasDeCarencia { get; private set; }
         public IReadOnlyCollection<Parcela> Parcelas => _parcelas.ToList().AsReadOnly();
 
         public Percentual TaxaAoDia =>
@@ -40,9 +40,11 @@ namespace Credito.Domain.ContratoDeEmprestimo
             }
         }
 
+        private ContratoDeEmprestimoAggregate() { }
+
         private ContratoDeEmprestimoAggregate(ParametrosDeContratoDeEmprestimo parametros)
+            : base(parametros.Id)
         {
-            Id = parametros.Id;
             ValorLiquido = parametros.ValorLiquido;
             QuantidadeDeParcelas = parametros.Prazo;
             TaxaAoMes = parametros.TaxaAoMes;

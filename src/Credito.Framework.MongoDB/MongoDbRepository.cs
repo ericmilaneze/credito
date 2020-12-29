@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Credito.Domain.Common;
+using Credito.Domain.ContratoDeEmprestimo;
+using Credito.Framework.MongoDB.Example;
+using Credito.Framework.MongoDB.Serializers;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
@@ -22,17 +25,12 @@ namespace Credito.Framework.MongoDB
             
             RegisterConventions();
             RegisterSerializers();
+            RegisterClassMaps();
         }
 
-        private static void RegisterSerializers()
+        private void RegisterConventions()
         {
-            BsonSerializer.RegisterSerializer(new IdadeSerializer());
-            BsonSerializer.RegisterSerializer(new DecimalSerializer(BsonType.Decimal128));
-        }
-
-        private static void RegisterConventions()
-        {
-            ConventionRegistry.Register("Default",
+            ConventionRegistry.Register("Custom Conventions",
                                         new ConventionPack
                                         {
                                             new CamelCaseElementNameConvention(),
@@ -42,8 +40,62 @@ namespace Credito.Framework.MongoDB
                                         _ => true);
         }
 
+        private void RegisterSerializers()
+        {
+            BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
+            BsonSerializer.RegisterSerializer(new DecimalSerializer(BsonType.Decimal128));
+
+            BsonSerializer.RegisterSerializer(new IdadeExampleSerializer());
+            BsonSerializer.RegisterSerializer(new PercentualPositivoSerializer());
+            BsonSerializer.RegisterSerializer(new PercentualSerializer());
+            BsonSerializer.RegisterSerializer(new PrazoSerializer());
+            BsonSerializer.RegisterSerializer(new ValorMonetarioPositivoSerializer());
+            BsonSerializer.RegisterSerializer(new ValorMonetarioSerializer());
+            BsonSerializer.RegisterSerializer(new NumeroParcelaSerializer());
+        }
+
+        private void RegisterClassMaps()
+        {
+            BsonClassMap.RegisterClassMap<ExampleAggregate>(cm =>
+            {
+                cm.AutoMap();
+                cm.SetIgnoreExtraElements(true);
+            });
+
+            BsonClassMap.RegisterClassMap<ContratoDeEmprestimoAggregate>(cm =>
+            {
+                cm.AutoMap();
+                cm.MapField("_parcelas").SetElementName("parcelas");
+                cm.MapProperty(c => c.TaxaAoDia).SetElementName("taxaAoDia");
+                cm.MapProperty(c => c.ValorCarencia).SetElementName("valorCarencia");
+                cm.MapProperty(c => c.ValorFinanciado).SetElementName("valorFinanciado");
+                cm.MapProperty(c => c.ValorDaParcela).SetElementName("valorDaParcela");
+                cm.SetIgnoreExtraElements(true);
+            });
+
+            BsonClassMap.RegisterClassMap<Parcela>(cm =>
+            {
+                cm.AutoMap();
+                cm.MapField(p => p.SaldoDevedorFinal).SetElementName("saldoDevedorFinal");
+                cm.SetIgnoreExtraElements(true);
+            });
+        }
+
         public IMongoCollection<T> GetCollection<T>() =>
-            _database.GetCollection<T>("aggregates");
+            _database.GetCollection<T>(GetCollectionName<T>());
+
+        public string GetCollectionName<T>()
+        {
+            switch (typeof(T))
+            {
+                case Type t when t == typeof(ExampleAggregate):
+                    return "example_aggregates";
+                case Type t when t == typeof(ContratoDeEmprestimoAggregate):
+                    return "contratos";
+                default:
+                    throw new NotImplementedException($"Collection name not set yet for \"{typeof(T).Name}\"");
+            }
+        }
 
         public T Load<T>(Guid id) where T : AggregateRoot =>
             GetCollection<T>().AsQueryable()
