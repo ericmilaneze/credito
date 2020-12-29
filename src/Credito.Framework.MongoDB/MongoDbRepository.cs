@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
 using Credito.Domain.Common;
-using Credito.Domain.ContratoDeEmprestimo;
-using Credito.Framework.MongoDB.Example;
 using Credito.Framework.MongoDB.Registry;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
@@ -30,33 +30,40 @@ namespace Credito.Framework.MongoDB
         public IMongoCollection<T> GetCollection<T>() =>
             _database.GetCollection<T>(CollectionNamesRegistry.GetCollectionName<T>());
 
-        public T Load<T>(Guid id) where T : AggregateRoot =>
-            GetCollection<T>().AsQueryable()
-                              .Where(x => x.Id == id)
-                              .FirstOrDefault();
+        public async Task<T> LoadAsync<T>(Guid id,
+                                          CancellationToken cancellationToken = default(CancellationToken)) where T : AggregateRoot =>
+            await GetCollection<T>().AsQueryable()
+                                    .Where(x => x.Id == id)
+                                    .FirstOrDefaultAsync(cancellationToken);
 
-        public IList<T> Find<T>(Expression<Func<T, bool>> filter,
-                                int skip = 0,
-                                int take = 10) =>
-            GetCollection<T>().AsQueryable()
-                              .Where(filter)
-                              .Skip(skip)
-                              .Take(take)
-                              .ToList();
+        public async Task<IList<T>> FindAsync<T>(Expression<Func<T, bool>> filter,
+                                                 int skip = 0,
+                                                 int take = 10,
+                                                 CancellationToken cancellationToken = default(CancellationToken)) =>
+            await GetCollection<T>().AsQueryable()
+                                    .Where(filter)
+                                    .Skip(skip)
+                                    .Take(take)
+                                    .ToListAsync(cancellationToken);
 
-        public IList<T> Get<T>(int skip = 0, int take = 10) =>
-            GetCollection<T>().AsQueryable()
-                              .Skip(skip)
-                              .Take(take)
-                              .ToList();
+        public async Task<IList<T>> GetAsync<T>(int skip = 0,
+                                                int take = 10,
+                                                CancellationToken cancellationToken = default(CancellationToken)) =>
+            await GetCollection<T>().AsQueryable()
+                                    .Skip(skip)
+                                    .Take(take)
+                                    .ToListAsync(cancellationToken);
 
-        public void Insert<T>(T aggregate) =>
-            GetCollection<T>().InsertOne(aggregate);
+        public async Task InsertAsync<T>(T aggregate,
+                                         CancellationToken cancellationToken = default(CancellationToken)) =>
+            await GetCollection<T>().InsertOneAsync(aggregate, new InsertOneOptions(), cancellationToken);
 
-        public void Update<T>(T aggregate) where T : AggregateRoot =>
-            GetCollection<T>().ReplaceOne(x => x.Id == aggregate.Id, aggregate);
+        public async Task UpdateAsync<T>(T aggregate,
+                                         CancellationToken cancellationToken = default(CancellationToken)) where T : AggregateRoot =>
+            await GetCollection<T>().ReplaceOneAsync(x => x.Id == aggregate.Id, aggregate, new ReplaceOptions(), cancellationToken);
 
-        public void Remove<T>(Guid id) where T : AggregateRoot =>
-            GetCollection<T>().DeleteOne(x => x.Id == id);
+        public async Task RemoveAsync<T>(Guid id,
+                                         CancellationToken cancellationToken = default(CancellationToken)) where T : AggregateRoot =>
+            await GetCollection<T>().DeleteOneAsync(x => x.Id == id, cancellationToken);
     }
 }
