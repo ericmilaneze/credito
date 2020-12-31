@@ -2,15 +2,15 @@ using System;
 
 namespace Credito.Domain.Common
 {
-    public abstract class AggregateRoot
+    public abstract class AggregateRoot : Entity
     {
-        public Guid Id { get; private set; }
+        protected AggregateRoot()
+        { }
 
-        protected AggregateRoot() { }
-
-        public AggregateRoot(Guid id)
+        protected AggregateRoot(Guid id)
+            : base(id)
         {
-            Id = id;
+            
         }
     }
 }
