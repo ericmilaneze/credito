@@ -16,13 +16,13 @@ namespace Credito.Domain.Common.ValueObjects
             valorTodo * ObterPercentual();
 
         public ValorMonetario Aplicar(ValueFromDecimal valorTodo) =>
-            valorTodo.ToDecimal() * ObterPercentual();
+            ValueFromDecimal.ToDecimal(valorTodo) * ObterPercentual();
 
         public ValorMonetario Aplicar(ValorMonetario valorTodo) =>
-            valorTodo.ToDecimal() * ObterPercentual();
+            ValueFromDecimal.ToDecimal(valorTodo) * ObterPercentual();
 
         public decimal Aplicar(ValueFromInt valorTodo) =>
-            valorTodo.ToDecimal() * ObterPercentual();
+            ValueFromInt.ToDecimal(valorTodo) * ObterPercentual();
 
         public decimal ObterPercentual() =>
             _valor / 100;
@@ -52,10 +52,10 @@ namespace Credito.Domain.Common.ValueObjects
             v2.ObterPercentual() + v1;
 
         public static decimal operator *(Percentual v1, ValueFromDecimal v2) =>
-            v1.Aplicar(v2.ToDecimal());
+            v1.Aplicar(ValueFromDecimal.ToDecimal(v2));
 
         public static decimal operator *(Percentual v1, ValueFromInt v2) =>
-            v1.Aplicar(v2.ToDecimal());
+            v1.Aplicar(ValueFromInt.ToDecimal(v2));
 
         public static decimal operator *(Percentual v1, decimal v2) =>
             v1.Aplicar(v2);

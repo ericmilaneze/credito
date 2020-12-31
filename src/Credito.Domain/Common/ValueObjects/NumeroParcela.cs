@@ -9,7 +9,7 @@ namespace Credito.Domain.Common.ValueObjects
             
         }
 
-        public bool IsFirst() =>
+        public bool IsFirst =>
             _valor == 1;
 
         public override string ToString() =>
@@ -17,7 +17,7 @@ namespace Credito.Domain.Common.ValueObjects
 
         public static NumeroParcela FromInt(int valor)
         {
-            if (valor < 0)
+            if (valor <= 0)
                 throw new ArgumentOutOfRangeException(nameof(valor), valor, "Número da parcela não pode ser menor ou igual a zero.");
 
             return new NumeroParcela(valor);

@@ -72,7 +72,7 @@ namespace Credito.Domain.Tests.ValueObjects
         [MemberData(nameof(DadosDeConversaoOuCriacao))]
         public void Percentual_para_decimal(decimal valor)
         {
-            decimal percentual = Percentual.FromDecimal(valor).ToDecimal();
+            decimal percentual = Percentual.ToDecimal(Percentual.FromDecimal(valor));
 
             Assert.Equal(valor, percentual);
         }
@@ -91,9 +91,9 @@ namespace Credito.Domain.Tests.ValueObjects
             var valores = 
                 new Collection<decimal>()
                 {
-                    new Percentual(valor1).ToDecimal(),
-                    new Percentual(valor2).ToDecimal(),
-                    new Percentual(valor3).ToDecimal()
+                    Percentual.ToDecimal(new Percentual(valor1)),
+                    Percentual.ToDecimal(new Percentual(valor2)),
+                    Percentual.ToDecimal(new Percentual(valor3))
                 };
 
             Assert.Equal(new Percentual(resultado), valores.Sum());

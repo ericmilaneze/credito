@@ -63,7 +63,7 @@ namespace Credito.Domain.Tests.ValueObjects
         [MemberData(nameof(DadosDeConversaoOuCriacao))]
         public void Valor_monetario_para_decimal(decimal valor)
         {
-            decimal valorMonetario = ValorMonetario.FromDecimal(valor).ToDecimal();
+            decimal valorMonetario = ValorMonetario.ToDecimal(ValorMonetario.FromDecimal(valor));
 
             Assert.Equal(valor, valorMonetario);
         }
@@ -75,9 +75,9 @@ namespace Credito.Domain.Tests.ValueObjects
             var valores = 
                 new Collection<decimal>()
                 {
-                    new ValorMonetario(valor1).ToDecimal(),
-                    new ValorMonetario(valor2).ToDecimal(),
-                    new ValorMonetario(valor3).ToDecimal()
+                    ValorMonetario.ToDecimal(new ValorMonetario(valor1)),
+                    ValorMonetario.ToDecimal(new ValorMonetario(valor2)),
+                    ValorMonetario.ToDecimal(new ValorMonetario(valor3))
                 };
 
             Assert.Equal(new ValorMonetario(resultado), valores.Sum());

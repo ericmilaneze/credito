@@ -34,7 +34,7 @@ namespace Credito.Domain.ContratoDeEmprestimo
             get
             {
                 var denominator = Math.Pow(decimal.ToDouble(1 + TaxaAoMes),
-                                           decimal.ToDouble(QuantidadeDeParcelas.ToInt()))
+                                           decimal.ToDouble(Prazo.ToInt(QuantidadeDeParcelas)))
                                   - 1;
                 return (TaxaAoMes + (TaxaAoMes/denominator)) * ValorFinanciado;
             }
@@ -62,7 +62,7 @@ namespace Credito.Domain.ContratoDeEmprestimo
 
         private void GerarParcelas()
         {
-            for (int numeroParcela = 1; numeroParcela <= QuantidadeDeParcelas.ToInt(); numeroParcela++)
+            for (int numeroParcela = 1; numeroParcela <= Prazo.ToInt(QuantidadeDeParcelas); numeroParcela++)
                 AdicionarParcela(numeroParcela, CalculadoraDeParcelaFactory.Create(numeroParcela));
         }
 

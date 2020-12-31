@@ -9,28 +9,31 @@ namespace Credito.Domain.Common.ValueObjects
         internal ValueFromDecimal(decimal valor) =>
             _valor = valor;
 
-        public decimal ToDecimal() =>
-            _valor;
+        public static decimal ToDecimal(ValueFromDecimal value) =>
+            value?._valor ?? default(decimal);
+
+        public static decimal? ToDecimalNullable(ValueFromDecimal value) =>
+            value?._valor;
 
         public override string ToString() =>
             _valor.ToString();
 
         public int CompareTo(ValueFromDecimal other) =>
-            _valor.CompareTo(other._valor);
+            _valor.CompareTo(other?._valor);
 
         public static decimal operator +(ValueFromDecimal v1, ValueFromDecimal v2) =>
-            v1._valor + v2._valor;
+            ToDecimal(v1) + ToDecimal(v2);
 
         public static decimal operator -(ValueFromDecimal v1, ValueFromDecimal v2) =>
-            v1._valor - v2._valor;
+            ToDecimal(v1) - ToDecimal(v2);
 
         public static decimal operator *(ValueFromDecimal v1, ValueFromDecimal v2) =>
-            v1._valor * v2._valor;
+            ToDecimal(v1) * ToDecimal(v2);
 
         public static decimal operator +(decimal v1, ValueFromDecimal v2) =>
-            v1 + v2._valor;
+            v1 + ToDecimal(v2);
 
         public static decimal operator *(decimal v1, ValueFromDecimal v2) =>
-            v1 * v2._valor;
+            v1 * ToDecimal(v2);
     }
 }

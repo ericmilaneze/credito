@@ -23,7 +23,7 @@ namespace Credito.Framework.MongoDB.Serializers
         public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, T value)
         {
             var serializer = BsonSerializer.LookupSerializer(typeof(int));
-            serializer.Serialize(context, value.ToInt());
+            serializer.Serialize(context, ValueFromInt.ToIntNullable(value));
         }
     }
 }

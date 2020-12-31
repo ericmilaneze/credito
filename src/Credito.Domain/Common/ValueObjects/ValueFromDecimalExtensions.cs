@@ -11,7 +11,7 @@ namespace Credito.Domain.Common.ValueObjects
         {
             decimal sum = 0M;
             checked {
-                foreach (decimal v in source?.Select(v => v?.ToDecimal() ?? default(decimal)) ?? Enumerable.Empty<decimal>())
+                foreach (decimal v in source?.Select(v => ValueFromDecimal.ToDecimal(v)) ?? Enumerable.Empty<decimal>())
                     sum += v;
             }
             return (T)Activator.CreateInstance(typeof(T),

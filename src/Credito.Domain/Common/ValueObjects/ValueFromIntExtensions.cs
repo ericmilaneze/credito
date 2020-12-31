@@ -11,7 +11,7 @@ namespace Credito.Domain.Common.ValueObjects
         {
             int sum = 0;
             checked {
-                foreach (int v in source?.Select(v => v?.ToInt() ?? default(int)) ?? Enumerable.Empty<int>())
+                foreach (int v in source?.Select(v => ValueFromInt.ToInt(v)) ?? Enumerable.Empty<int>())
                     sum += v;
             }
             return (T)Activator.CreateInstance(typeof(T),

@@ -77,7 +77,7 @@ namespace Credito.Domain.Tests.ValueObjects
         [MemberData(nameof(DadosDeConversaoOuCriacao))]
         public void Valor_monetario_positivo_para_decimal(decimal valor)
         {
-            decimal valorMonetario = ValorMonetarioPositivo.FromDecimal(valor).ToDecimal();
+            decimal valorMonetario = ValorMonetarioPositivo.ToDecimal(ValorMonetarioPositivo.FromDecimal(valor));
 
             Assert.Equal(valor, valorMonetario);
         }
@@ -89,9 +89,9 @@ namespace Credito.Domain.Tests.ValueObjects
             var valores = 
                 new Collection<decimal>()
                 {
-                    new ValorMonetarioPositivo(valor1).ToDecimal(),
-                    new ValorMonetarioPositivo(valor2).ToDecimal(),
-                    new ValorMonetarioPositivo(valor3).ToDecimal()
+                    ValorMonetarioPositivo.ToDecimal(new ValorMonetarioPositivo(valor1)),
+                    ValorMonetarioPositivo.ToDecimal(new ValorMonetarioPositivo(valor2)),
+                    ValorMonetarioPositivo.ToDecimal(new ValorMonetarioPositivo(valor3))
                 };
 
             Assert.Equal(new ValorMonetarioPositivo(resultado), valores.Sum());

@@ -77,7 +77,7 @@ namespace Credito.Domain.Tests.ValueObjects
         [MemberData(nameof(DadosDeConversaoOuCriacao))]
         public void Prazo_em_dias_para_int(int valor)
         {
-            int prazo = Prazo.FromInt(valor).ToInt();
+            int prazo = Prazo.ToInt(Prazo.FromInt(valor));
 
             Assert.Equal(valor, prazo);
         }
@@ -89,9 +89,9 @@ namespace Credito.Domain.Tests.ValueObjects
             var valores = 
                 new Collection<int>()
                 {
-                    new Prazo(valor1).ToInt(),
-                    new Prazo(valor2).ToInt(),
-                    new Prazo(valor3).ToInt()
+                    Prazo.ToInt(new Prazo(valor1)),
+                    Prazo.ToInt(new Prazo(valor2)),
+                    Prazo.ToInt(new Prazo(valor3))
                 };
 
             Assert.Equal(new Prazo(resultado), valores.Sum());
