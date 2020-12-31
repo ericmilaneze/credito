@@ -19,7 +19,7 @@ namespace Credito.Domain.Common.ValueObjects
             _valor.ToString();
 
         public int CompareTo(ValueFromDecimal other) =>
-            _valor.CompareTo(other?._valor);
+            _valor.CompareTo(ValueFromDecimal.ToDecimal(other));
 
         public static decimal operator +(ValueFromDecimal v1, ValueFromDecimal v2) =>
             ToDecimal(v1) + ToDecimal(v2);

@@ -22,7 +22,7 @@ namespace Credito.Domain.Common.ValueObjects
             _valor.ToString();
 
         public int CompareTo(ValueFromInt other) =>
-            _valor.CompareTo(other?._valor);
+            _valor.CompareTo(ValueFromInt.ToInt(other));
 
         public static int operator -(ValueFromInt v1, ValueFromInt v2) =>
             ToInt(v1) - ToInt(v2);
