@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Credito.Domain.ContratoDeEmprestimo;
 using Credito.Framework.MongoDB.Example;
 
@@ -11,15 +12,13 @@ namespace Credito.Framework.MongoDB.Registry
 
         public static string GetCollectionName<T>()
         {
-            switch (typeof(T))
+            Dictionary<Type, string> collectionNames = new Dictionary<Type, string>()
             {
-                case Type t when t == typeof(ExampleAggregate):
-                    return ExampleAggregate;
-                case Type t when t == typeof(ContratoDeEmprestimoAggregate):
-                    return ContratoDeEmprestimoAggregate;
-                default:
-                    throw new NotImplementedException($"Collection name not set yet for \"{typeof(T).Name}\"");
-            }
+                [typeof(ExampleAggregate)] = ExampleAggregate,
+                [typeof(ContratoDeEmprestimoAggregate)] = ContratoDeEmprestimoAggregate
+            };
+
+            return collectionNames[typeof(T)];
         }
     }
 }

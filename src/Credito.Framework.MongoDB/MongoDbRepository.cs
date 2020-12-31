@@ -4,66 +4,65 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Credito.Domain.Common;
-using Credito.Framework.MongoDB.Registry;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
 namespace Credito.Framework.MongoDB
 {
-    public sealed class MongoDbRepository : IMongoDbRepository
+    public abstract class MongoDbRepository<T> : IRepository<T> where T : AggregateRoot
     {
-        private readonly IMongoDatabase _database;
+        private readonly IMongoDbContext _mongoDbContext;
 
-        static MongoDbRepository()
-        {
-            ConventionsRegistry.RegisterConventions();
-            SerializersRegistry.RegisterSerializers();
-            ClassMapsRegistry.RegisterClassMaps();
-        }
+        public MongoDbRepository(IMongoDbContext mongoDbContext) =>
+            _mongoDbContext = mongoDbContext;
 
-        public MongoDbRepository(string connectionString, string dbName)
-        {
-            var mongoClient = new MongoClient(connectionString);
-            _database = mongoClient.GetDatabase(dbName);
-        }
+        public async Task<T> LoadAsync(Guid id,
+                                       CancellationToken cancellationToken = default(CancellationToken)) =>
+            await _mongoDbContext.GetCollection<T>().AsQueryable()
+                                                    .Where(x => x.Id == id)
+                                                    .FirstOrDefaultAsync(cancellationToken);
 
-        public IMongoCollection<T> GetCollection<T>() =>
-            _database.GetCollection<T>(CollectionNamesRegistry.GetCollectionName<T>());
+        public async Task<IList<T>> FindAsync(Expression<Func<T, bool>> filter,
+                                              int skip = 0,
+                                              int take = 10,
+                                              CancellationToken cancellationToken = default(CancellationToken)) =>
+            await _mongoDbContext.GetCollection<T>().AsQueryable()
+                                                    .Where(filter)
+                                                    .Skip(skip)
+                                                    .Take(take)
+                                                    .ToListAsync(cancellationToken);
 
-        public async Task<T> LoadAsync<T>(Guid id,
-                                          CancellationToken cancellationToken = default(CancellationToken)) where T : AggregateRoot =>
-            await GetCollection<T>().AsQueryable()
-                                    .Where(x => x.Id == id)
-                                    .FirstOrDefaultAsync(cancellationToken);
+        public async Task<IList<T>> GetAsync(int skip = 0,
+                                             int take = 10,
+                                             CancellationToken cancellationToken = default(CancellationToken)) =>
+            await _mongoDbContext.GetCollection<T>().AsQueryable()
+                                                    .Skip(skip)
+                                                    .Take(take)
+                                                    .ToListAsync(cancellationToken);
 
-        public async Task<IList<T>> FindAsync<T>(Expression<Func<T, bool>> filter,
-                                                 int skip = 0,
-                                                 int take = 10,
-                                                 CancellationToken cancellationToken = default(CancellationToken)) =>
-            await GetCollection<T>().AsQueryable()
-                                    .Where(filter)
-                                    .Skip(skip)
-                                    .Take(take)
-                                    .ToListAsync(cancellationToken);
+        public async Task InsertAsync(T aggregate,
+                                      CancellationToken cancellationToken = default(CancellationToken)) =>
+            await _mongoDbContext.GetCollection<T>().InsertOneAsync(aggregate, 
+                                                                    new InsertOneOptions(),
+                                                                    cancellationToken);
 
-        public async Task<IList<T>> GetAsync<T>(int skip = 0,
-                                                int take = 10,
-                                                CancellationToken cancellationToken = default(CancellationToken)) =>
-            await GetCollection<T>().AsQueryable()
-                                    .Skip(skip)
-                                    .Take(take)
-                                    .ToListAsync(cancellationToken);
+        public async Task UpdateAsync(T aggregate,
+                                      CancellationToken cancellationToken = default(CancellationToken)) =>
+            await _mongoDbContext.GetCollection<T>().ReplaceOneAsync(x => x.Id == aggregate.Id, 
+                                                                     aggregate,
+                                                                     new ReplaceOptions(),
+                                                                     cancellationToken);
+                                                            
+        public async Task SaveAsync(T aggregate,
+                                    CancellationToken cancellationToken = default(CancellationToken)) =>
+            await _mongoDbContext.GetCollection<T>().ReplaceOneAsync(x => x.Id == aggregate.Id, 
+                                                                     aggregate, 
+                                                                     new ReplaceOptions() { IsUpsert = true },
+                                                                     cancellationToken);
 
-        public async Task InsertAsync<T>(T aggregate,
-                                         CancellationToken cancellationToken = default(CancellationToken)) =>
-            await GetCollection<T>().InsertOneAsync(aggregate, new InsertOneOptions(), cancellationToken);
-
-        public async Task UpdateAsync<T>(T aggregate,
-                                         CancellationToken cancellationToken = default(CancellationToken)) where T : AggregateRoot =>
-            await GetCollection<T>().ReplaceOneAsync(x => x.Id == aggregate.Id, aggregate, new ReplaceOptions(), cancellationToken);
-
-        public async Task RemoveAsync<T>(Guid id,
-                                         CancellationToken cancellationToken = default(CancellationToken)) where T : AggregateRoot =>
-            await GetCollection<T>().DeleteOneAsync(x => x.Id == id, cancellationToken);
+        public async Task RemoveAsync(Guid id,
+                                      CancellationToken cancellationToken = default(CancellationToken)) =>
+            await _mongoDbContext.GetCollection<T>().DeleteOneAsync(x => x.Id == id,
+                                                                    cancellationToken);
     }
 }
