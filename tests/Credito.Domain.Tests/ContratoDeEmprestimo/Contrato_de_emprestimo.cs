@@ -18,7 +18,7 @@ namespace Credito.Domain.Tests.ContratoDeEmprestimo
                 {
                     Id = Guid.NewGuid(),
                     ValorLiquido = data.ValorLiquido,
-                    Prazo = data.Prazo,
+                    QuantidadeDeParcelas = data.Prazo,
                     TaxaAoMes = data.TaxaAoMes,
                     Tac = data.Tac,
                     Iof = data.Iof,

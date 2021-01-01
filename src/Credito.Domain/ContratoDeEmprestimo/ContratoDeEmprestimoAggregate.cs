@@ -46,7 +46,7 @@ namespace Credito.Domain.ContratoDeEmprestimo
             : base(parametros.Id)
         {
             ValorLiquido = parametros.ValorLiquido;
-            QuantidadeDeParcelas = parametros.Prazo;
+            QuantidadeDeParcelas = parametros.QuantidadeDeParcelas;
             TaxaAoMes = parametros.TaxaAoMes;
             Tac = parametros.Tac;
             Iof = parametros.Iof;
@@ -83,7 +83,7 @@ namespace Credito.Domain.ContratoDeEmprestimo
         {
             public Guid Id { get; init; }
             public ValorMonetarioPositivo ValorLiquido { get; init; }
-            public Prazo Prazo { get; init; }
+            public Prazo QuantidadeDeParcelas { get; init; }
             public PercentualPositivo TaxaAoMes { get; init; }
             public Percentual Tac { get; init; }
             public ValorMonetario Iof { get; init; }

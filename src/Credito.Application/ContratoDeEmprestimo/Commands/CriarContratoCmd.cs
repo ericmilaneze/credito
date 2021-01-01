@@ -1,7 +1,11 @@
+using System;
+using MediatR;
+
 namespace Credito.Application.ContratoDeEmprestimo.Commands
 {
-    public record CriarContratoCmd
+    public record CriarContratoCmd : IRequest
     {
+        public Guid Id { get; set; }
         public decimal ValorLiquido { get; init; }
         public int QuantidadeDeParcelas { get; init; }
         public decimal TaxaAoMes { get; init; }
