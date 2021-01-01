@@ -29,7 +29,7 @@ namespace Credito.Application.ContratoDeEmprestimo.Handlers
                     DiasDeCarencia = request.DiasDeCarencia,
                 }
             );
-            await _repository.SaveAsync(contrato);
+            await _repository.SaveAsync(contrato, cancellationToken);
         }
     }
 }
