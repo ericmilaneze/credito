@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Credito.Domain\Credito.Domain.csproj" />
-    <ProjectReference Include="..\..\src\Credito.Repository\Credito.Framework.Repository.csproj" />
+    <ProjectReference Include="..\..\src\Credito.Repository\Credito.Repository.csproj" />
     <ProjectReference Include="..\..\src\Credito.Framework.MongoDB\Credito.Framework.MongoDB.csproj" />
   </ItemGroup>
 

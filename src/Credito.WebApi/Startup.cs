@@ -1,3 +1,4 @@
+using AutoMapper;
 using Credito.Application;
 using Credito.Application.Common.Behaviors;
 using Credito.Application.ContratoDeEmprestimo.Commands;
@@ -6,6 +7,7 @@ using Credito.Domain.Common;
 using Credito.Domain.ContratoDeEmprestimo;
 using Credito.Framework.MongoDB;
 using Credito.Repository;
+using Credito.WebApi.Models;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -36,6 +38,8 @@ namespace Credito.WebApi
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
+
+            services.AddAutoMapper(this.GetType().Assembly);
 
             services.AddSingleton<IMongoDbContext>(new MongoDbContext("mongodb://localhost", "test"))
                     .AddScoped<IDbRepository<ContratoDeEmprestimoAggregate>, MongoDbRepository<ContratoDeEmprestimoAggregate>>()

@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Credito.Domain\Credito.Domain.csproj" />
-    <ProjectReference Include="..\Credito.Domain\Credito.Repository.csproj" />
+    <ProjectReference Include="..\Credito.Repository\Credito.Repository.csproj" />
   </ItemGroup>
 
 </Project>

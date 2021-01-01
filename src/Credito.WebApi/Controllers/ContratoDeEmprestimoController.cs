@@ -1,7 +1,8 @@
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Credito.Application.ContratoDeEmprestimo.Commands;
-using Credito.Domain.ContratoDeEmprestimo;
+using Credito.WebApi.Models;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,12 @@ namespace Credito.WebApi.Controllers
     public class ContratoDeEmprestimoController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
-        public ContratoDeEmprestimoController(IMediator mediator)
+        public ContratoDeEmprestimoController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         [HttpPost]
@@ -27,7 +30,7 @@ namespace Credito.WebApi.Controllers
                 await _mediator.Send(cmd, cancellationToken);
                 return Ok();
             }
-            catch(ValidationException ex)
+            catch (ValidationException ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -39,10 +42,10 @@ namespace Credito.WebApi.Controllers
         {
             try
             {
-                var contrato = await _mediator.Send(cmd, cancellationToken);
-                return Ok(contrato);
+                var contratoCalculado = await _mediator.Send(cmd, cancellationToken);
+                return Ok(_mapper.Map<ContratoDeEmprestimoModel>(contratoCalculado));
             }
-            catch(ValidationException ex)
+            catch (ValidationException ex)
             {
                 return BadRequest(ex.Message);
             }
