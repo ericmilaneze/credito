@@ -25,30 +25,16 @@ namespace Credito.WebApi.Controllers
         public async Task<IActionResult> CriarContrato([FromBody] CriarContratoCmd cmd,
                                                        CancellationToken cancellationToken = default(CancellationToken))
         {
-            try
-            {
-                await _mediator.Send(cmd, cancellationToken);
-                return Ok();
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _mediator.Send(cmd, cancellationToken);
+            return Ok();
         }
 
         [HttpPost("calculo")]
         public async Task<IActionResult> CalcularContrato([FromBody] CalcularContratoCmd cmd,
                                                           CancellationToken cancellationToken = default(CancellationToken))
         {
-            try
-            {
-                var contratoCalculado = await _mediator.Send(cmd, cancellationToken);
-                return Ok(_mapper.Map<ContratoDeEmprestimoModel>(contratoCalculado));
-            }
-            catch (ValidationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var contratoCalculado = await _mediator.Send(cmd, cancellationToken);
+            return Ok(_mapper.Map<ContratoDeEmprestimoModel>(contratoCalculado));
         }
     }
 }

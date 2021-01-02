@@ -1,17 +1,19 @@
+using System.Linq;
+using System.Net;
 using AutoMapper;
 using Credito.Application;
 using Credito.Application.Common.Behaviors;
-using Credito.Application.ContratoDeEmprestimo.Commands;
-using Credito.Application.ContratoDeEmprestimo.Handlers;
 using Credito.Domain.Common;
 using Credito.Domain.ContratoDeEmprestimo;
 using Credito.Framework.MongoDB;
 using Credito.Repository;
-using Credito.WebApi.Models;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -59,6 +61,28 @@ namespace Credito.WebApi
         {
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
+
+            app.UseExceptionHandler(a => a.Run(async context =>
+            {
+                var exceptionFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+
+                if (exceptionFeature.Error is ValidationException validationException)
+                {
+                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    await context.Response.WriteAsJsonAsync(
+                        new 
+                        {
+                            message = validationException.Message,
+                            fields = validationException.Errors
+                                .GroupBy(x => x.PropertyName)
+                                .Select(x => new 
+                                            { 
+                                                Name = x.Key, 
+                                                ErrorMessage = x.Select(v => v.ErrorMessage) 
+                                            })
+                        });
+                }
+            }));
 
             app.UseSerilogRequestLogging()
                .UseHttpsRedirection()
