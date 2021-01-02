@@ -1,4 +1,4 @@
-namespace Credito.WebApi.Models
+namespace Credito.Application.Models
 {
     public record ParcelaModel
     {

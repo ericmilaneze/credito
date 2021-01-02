@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Credito.WebApi.Models
+namespace Credito.Application.Models
 {
     public record ContratoDeEmprestimoModel
     {

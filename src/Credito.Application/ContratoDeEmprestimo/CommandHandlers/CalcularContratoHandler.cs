@@ -1,15 +1,24 @@
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Credito.Application.ContratoDeEmprestimo.Commands;
+using Credito.Application.Models;
 using Credito.Domain.ContratoDeEmprestimo;
 using MediatR;
 
-namespace Credito.Application.ContratoDeEmprestimo.Handlers
+namespace Credito.Application.ContratoDeEmprestimo.CommandHandlers
 {
-    public class CalcularContratoHandler : IRequestHandler<CalcularContratoCmd, ContratoDeEmprestimoAggregate>
+    public class CalcularContratoHandler : IRequestHandler<CalcularContratoCmd, ContratoDeEmprestimoModel>
     {
-        public async Task<ContratoDeEmprestimoAggregate> Handle(CalcularContratoCmd request, CancellationToken cancellationToken) =>
-            await Task.FromResult(
+        private readonly IMapper _mapper;
+
+        public CalcularContratoHandler(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
+        public async Task<ContratoDeEmprestimoModel> Handle(CalcularContratoCmd request, CancellationToken cancellationToken) =>
+            await Task.FromResult(_mapper.Map<ContratoDeEmprestimoModel>(
                 ContratoDeEmprestimoAggregate.CriarContrato(
                     new ContratoDeEmprestimoAggregate.ParametrosDeContratoDeEmprestimo
                     {
@@ -22,6 +31,6 @@ namespace Credito.Application.ContratoDeEmprestimo.Handlers
                         DiasDeCarencia = request.DiasDeCarencia,
                     }
                 )
-            );
+            ));
     }
 }

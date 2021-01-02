@@ -7,6 +7,7 @@ using Credito.Domain.Common;
 using Credito.Domain.ContratoDeEmprestimo;
 using Credito.Framework.MongoDB;
 using Credito.Repository;
+using Credito.WebApi.Middlewares;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
@@ -41,17 +42,10 @@ namespace Credito.WebApi
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
 
-            services.AddAutoMapper(this.GetType().Assembly);
-
-            services.AddSingleton<IMongoDbContext>(new MongoDbContext("mongodb://localhost", "test"))
-                    .AddScoped<IDbRepository<ContratoDeEmprestimoAggregate>, MongoDbRepository<ContratoDeEmprestimoAggregate>>()
-                    .AddScoped<IContratoDeEmprestimoRepository, ContratoDeEmprestimoRepository>();
-
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
-                    .AddMediatR(typeof(AssemblyInfo).Assembly);
+            DependencyInjection.ConfigureServices(services);
 
             services.AddMvcCore()
-                    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(AssemblyInfo).Assembly))
+                    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(DependencyInjection).Assembly))
                     .AddDataAnnotations()
                     .AddApiExplorer();
         }
@@ -62,27 +56,8 @@ namespace Credito.WebApi
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
 
-            app.UseExceptionHandler(a => a.Run(async context =>
-            {
-                var exceptionFeature = context.Features.Get<IExceptionHandlerPathFeature>();
-
-                if (exceptionFeature.Error is ValidationException validationException)
-                {
-                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    await context.Response.WriteAsJsonAsync(
-                        new 
-                        {
-                            message = validationException.Message,
-                            fields = validationException.Errors
-                                .GroupBy(x => x.PropertyName)
-                                .Select(x => new 
-                                            { 
-                                                Name = x.Key, 
-                                                ErrorMessage = x.Select(v => v.ErrorMessage) 
-                                            })
-                        });
-                }
-            }));
+            app.UseValidationExceptionHandler()
+               .UseResourceAlreadyExistsExceptionHandler();
 
             app.UseSerilogRequestLogging()
                .UseHttpsRedirection()

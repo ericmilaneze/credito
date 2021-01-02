@@ -1,10 +1,9 @@
-using System;
-using Credito.Domain.ContratoDeEmprestimo;
+using Credito.Application.Models;
 using MediatR;
 
 namespace Credito.Application.ContratoDeEmprestimo.Commands
 {
-    public record CalcularContratoCmd : CalcularContratoCmdBase, IRequest<ContratoDeEmprestimoAggregate>
+    public record CalcularContratoCmd : CalcularContratoCmdBase, IRequest<ContratoDeEmprestimoModel>
     {
 
     }

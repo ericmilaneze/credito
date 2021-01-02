@@ -1,10 +1,11 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Credito.Application.Common.Exceptions;
 using Credito.Application.ContratoDeEmprestimo.Commands;
 using Credito.Domain.ContratoDeEmprestimo;
 using MediatR;
 
-namespace Credito.Application.ContratoDeEmprestimo.Handlers
+namespace Credito.Application.ContratoDeEmprestimo.CommandHandlers
 {
     public class CriarContratoHandler : AsyncRequestHandler<CriarContratoCmd>
     {
@@ -17,6 +18,11 @@ namespace Credito.Application.ContratoDeEmprestimo.Handlers
 
         protected override async Task Handle(CriarContratoCmd request, CancellationToken cancellationToken)
         {
+            var resource = await _repository.LoadAsync(request.Id);
+
+            if (resource != null)
+                throw new ResourceAlreadyExistsException(request);
+
             var contrato = ContratoDeEmprestimoAggregate.CriarContrato(
                 new ContratoDeEmprestimoAggregate.ParametrosDeContratoDeEmprestimo
                 {

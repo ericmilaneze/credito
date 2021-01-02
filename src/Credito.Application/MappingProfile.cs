@@ -1,9 +1,9 @@
 using AutoMapper;
 using Credito.Domain.Common.ValueObjects;
 using Credito.Domain.ContratoDeEmprestimo;
-using Credito.WebApi.Models;
+using Credito.Application.Models;
 
-namespace Credito.WebApi
+namespace Credito.Application
 {
     public class MappingProfile : Profile
     {
