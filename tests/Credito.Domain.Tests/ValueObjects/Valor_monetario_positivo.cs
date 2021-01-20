@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Credito.Domain.Common.ValueObjects;
+using FluentAssertions;
 using Xunit;
 
 namespace Credito.Domain.Tests.ValueObjects
@@ -47,7 +48,7 @@ namespace Credito.Domain.Tests.ValueObjects
         {
             var valorMonetario = ValorMonetarioPositivo.FromDecimal(valor);
 
-            Assert.Equal(new ValorMonetarioPositivo(valor), valorMonetario);
+            valorMonetario.Should().BeEquivalentTo(new ValorMonetarioPositivo(valor));
         }
 
         [Theory]
@@ -56,7 +57,7 @@ namespace Credito.Domain.Tests.ValueObjects
         {
             ValorMonetarioPositivo valorMonetario = valor;
 
-            Assert.Equal(new ValorMonetarioPositivo(valor), valorMonetario);
+            valorMonetario.Should().BeEquivalentTo(new ValorMonetarioPositivo(valor));
         }
 
         [Theory]
@@ -79,7 +80,7 @@ namespace Credito.Domain.Tests.ValueObjects
         {
             decimal valorMonetario = ValorMonetarioPositivo.ToDecimal(ValorMonetarioPositivo.FromDecimal(valor));
 
-            Assert.Equal(valor, valorMonetario);
+            valorMonetario.Should().Be(valor);
         }
 
         [Theory]
@@ -94,7 +95,7 @@ namespace Credito.Domain.Tests.ValueObjects
                     ValorMonetarioPositivo.ToDecimal(new ValorMonetarioPositivo(valor3))
                 };
 
-            Assert.Equal(new ValorMonetarioPositivo(resultado), valores.Sum());
+            valores.Sum().Should().Be(ValorMonetarioPositivo.ToDecimal(new ValorMonetarioPositivo(resultado)));
         }
 
         [Theory]
@@ -109,7 +110,7 @@ namespace Credito.Domain.Tests.ValueObjects
                     new ValorMonetarioPositivo(valor3)
                 };
 
-            Assert.Equal(new ValorMonetarioPositivo(resultado), valores.Sum());
+            valores.Sum().Should().BeEquivalentTo(new ValorMonetarioPositivo(resultado));
         }
 
         [Theory]
@@ -124,7 +125,7 @@ namespace Credito.Domain.Tests.ValueObjects
                     new ValorMonetarioPositivo(valor3)
                 };
 
-            Assert.Equal(new ValorMonetarioPositivo(resultado), valores.Min());
+            valores.Min().Should().BeEquivalentTo(new ValorMonetarioPositivo(resultado));
         }
 
         [Theory]
@@ -139,7 +140,7 @@ namespace Credito.Domain.Tests.ValueObjects
                     new ValorMonetarioPositivo(valor3)
                 };
 
-            Assert.Equal(new ValorMonetarioPositivo(resultado), valores.Max());
+            valores.Max().Should().BeEquivalentTo(new ValorMonetarioPositivo(resultado));
         }
     }
 }

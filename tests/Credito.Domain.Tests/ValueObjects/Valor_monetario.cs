@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Credito.Domain.Common.ValueObjects;
+using FluentAssertions;
 using Xunit;
 
 namespace Credito.Domain.Tests.ValueObjects
@@ -47,7 +48,7 @@ namespace Credito.Domain.Tests.ValueObjects
         {
             var valorMonetario = ValorMonetario.FromDecimal(valor);
 
-            Assert.Equal(new ValorMonetario(valor), valorMonetario);
+            valorMonetario.Should().BeEquivalentTo(new ValorMonetario(valor));
         }
 
         [Theory]
@@ -56,7 +57,7 @@ namespace Credito.Domain.Tests.ValueObjects
         {
             ValorMonetario valorMonetario = valor;
 
-            Assert.Equal(new ValorMonetario(valor), valorMonetario);
+            valorMonetario.Should().BeEquivalentTo(new ValorMonetario(valor));
         }
 
         [Theory]
@@ -65,7 +66,7 @@ namespace Credito.Domain.Tests.ValueObjects
         {
             decimal valorMonetario = ValorMonetario.ToDecimal(ValorMonetario.FromDecimal(valor));
 
-            Assert.Equal(valor, valorMonetario);
+            valorMonetario.Should().Be(valor);
         }
 
         [Theory]
@@ -80,7 +81,7 @@ namespace Credito.Domain.Tests.ValueObjects
                     ValorMonetario.ToDecimal(new ValorMonetario(valor3))
                 };
 
-            Assert.Equal(new ValorMonetario(resultado), valores.Sum());
+            valores.Sum().Should().Be(ValorMonetario.ToDecimal(new ValorMonetario(resultado)));
         }
 
         [Theory]
@@ -95,7 +96,7 @@ namespace Credito.Domain.Tests.ValueObjects
                     new ValorMonetario(valor3)
                 };
 
-            Assert.Equal(new ValorMonetario(resultado), valores.Sum());
+            valores.Sum().Should().BeEquivalentTo(new ValorMonetario(resultado));
         }
 
         [Theory]
@@ -110,7 +111,7 @@ namespace Credito.Domain.Tests.ValueObjects
                     new ValorMonetario(valor3)
                 };
 
-            Assert.Equal(new ValorMonetario(resultado), valores.Min());
+            valores.Min().Should().BeEquivalentTo(new ValorMonetario(resultado));
         }
 
         [Theory]
@@ -124,8 +125,8 @@ namespace Credito.Domain.Tests.ValueObjects
                     new ValorMonetario(valor2),
                     new ValorMonetario(valor3)
                 };
-
-            Assert.Equal(new ValorMonetario(resultado), valores.Max());
+            
+            valores.Max().Should().BeEquivalentTo(new ValorMonetario(resultado));
         }
     }
 }

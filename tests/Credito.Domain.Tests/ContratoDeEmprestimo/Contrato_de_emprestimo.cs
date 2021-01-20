@@ -4,6 +4,8 @@ using Credito.Domain.Common.ValueObjects;
 using Xunit;
 using static Credito.Domain.ContratoDeEmprestimo.ContratoDeEmprestimoAggregate;
 using System;
+using FluentAssertions;
+using System.Linq;
 
 namespace Credito.Domain.Tests.ContratoDeEmprestimo
 {
@@ -25,11 +27,11 @@ namespace Credito.Domain.Tests.ContratoDeEmprestimo
                     DiasDeCarencia = data.DiasDeCarencia
                 });
 
-            Assert.Equal(new Percentual(data.TaxaAoDia), contrato.TaxaAoDia);
-            Assert.Equal(new ValorMonetario(data.ValorCarencia), contrato.ValorCarencia);
-            Assert.Equal(new ValorMonetario(data.ValorFinanciado), contrato.ValorFinanciado);
-            Assert.Equal(new ValorMonetario(data.ValorDaParcela), contrato.ValorDaParcela);
-            Assert.All(contrato.Parcelas, p => data.Parcelas.Contains(p));
+            contrato.TaxaAoDia.Should().BeEquivalentTo(new Percentual(data.TaxaAoDia));
+            contrato.ValorCarencia.Should().BeEquivalentTo(new ValorMonetario(data.ValorCarencia));
+            contrato.ValorFinanciado.Should().BeEquivalentTo(new ValorMonetario(data.ValorFinanciado));
+            contrato.ValorDaParcela.Should().BeEquivalentTo(new ValorMonetario(data.ValorDaParcela));
+            contrato.Parcelas.All(p => data.Parcelas.Contains(p));
         }
     }
 }

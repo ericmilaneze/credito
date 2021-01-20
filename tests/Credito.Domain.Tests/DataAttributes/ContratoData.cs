@@ -15,6 +15,6 @@ namespace Credito.Domain.Tests.DataAttributes
         public decimal ValorCarencia { get; init; }
         public decimal ValorFinanciado { get; init; }
         public decimal ValorDaParcela { get; init; }
-        public IList<Parcela> Parcelas { get; init; }
+        public IEnumerable<Parcela> Parcelas { get; init; }
     }
 }

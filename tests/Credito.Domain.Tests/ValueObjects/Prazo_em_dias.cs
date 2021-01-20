@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Credito.Domain.Common.ValueObjects;
+using FluentAssertions;
 using Xunit;
 
 namespace Credito.Domain.Tests.ValueObjects
@@ -94,7 +95,7 @@ namespace Credito.Domain.Tests.ValueObjects
                     Prazo.ToInt(new Prazo(valor3))
                 };
 
-            Assert.Equal(new Prazo(resultado), valores.Sum());
+            valores.Sum().Should().Be(Prazo.ToInt(new Prazo(resultado)));
         }
 
         [Theory]
@@ -109,7 +110,7 @@ namespace Credito.Domain.Tests.ValueObjects
                     new Prazo(valor3)
                 };
 
-            Assert.Equal(new Prazo(resultado), valores.Sum());
+            valores.Sum().Should().BeEquivalentTo(new Prazo(resultado));
         }
 
         [Theory]
@@ -124,7 +125,7 @@ namespace Credito.Domain.Tests.ValueObjects
                     new Prazo(valor3)
                 };
 
-            Assert.Equal(new Prazo(resultado), valores.Min());
+            valores.Min().Should().BeEquivalentTo(new Prazo(resultado));
         }
 
         [Theory]
@@ -139,7 +140,7 @@ namespace Credito.Domain.Tests.ValueObjects
                     new Prazo(valor3)
                 };
 
-            Assert.Equal(new Prazo(resultado), valores.Max());
+            valores.Max().Should().BeEquivalentTo(new Prazo(resultado));
         }
     }
 }

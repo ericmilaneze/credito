@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Credito.Domain.Common.ValueObjects;
+using FluentAssertions;
 using Xunit;
 
 namespace Credito.Domain.Tests.ValueObjects
@@ -56,7 +57,7 @@ namespace Credito.Domain.Tests.ValueObjects
         {
             var percentual = Percentual.FromDecimal(valor);
 
-            Assert.Equal(new Percentual(valor), percentual);
+            percentual.Should().BeEquivalentTo(new Percentual(valor));
         }
 
         [Theory]
@@ -65,7 +66,7 @@ namespace Credito.Domain.Tests.ValueObjects
         {
             Percentual percentual = valor;
 
-            Assert.Equal(new Percentual(valor), percentual);
+            percentual.Should().BeEquivalentTo(new Percentual(valor));
         }
 
         [Theory]
@@ -74,14 +75,15 @@ namespace Credito.Domain.Tests.ValueObjects
         {
             decimal percentual = Percentual.ToDecimal(Percentual.FromDecimal(valor));
 
-            Assert.Equal(valor, percentual);
+            percentual.Should().Be(valor);
         }
 
         [Theory]
         [MemberData(nameof(DadosParaAplicarPercentual))]
         public void Aplicar_percentual(decimal valor, decimal percentual, decimal resultado)
         {
-            Assert.Equal(resultado, Percentual.FromDecimal(percentual).Aplicar(valor));
+            Percentual.FromDecimal(percentual).Aplicar(valor)
+                .Should().Be(resultado);
         }
 
         [Theory]
@@ -96,7 +98,7 @@ namespace Credito.Domain.Tests.ValueObjects
                     Percentual.ToDecimal(new Percentual(valor3))
                 };
 
-            Assert.Equal(new Percentual(resultado), valores.Sum());
+            valores.Sum().Should().Be(Percentual.ToDecimal(new Percentual(resultado)));
         }
 
         [Theory]
@@ -111,7 +113,7 @@ namespace Credito.Domain.Tests.ValueObjects
                     new Percentual(valor3)
                 };
 
-            Assert.Equal(new Percentual(resultado), valores.Sum());
+            valores.Sum().Should().BeEquivalentTo(new Percentual(resultado));
         }
 
         [Theory]
@@ -126,7 +128,7 @@ namespace Credito.Domain.Tests.ValueObjects
                     new Percentual(valor3)
                 };
 
-            Assert.Equal(new Percentual(resultado), valores.Min());
+            valores.Min().Should().BeEquivalentTo(new Percentual(resultado));
         }
 
         [Theory]
@@ -141,7 +143,7 @@ namespace Credito.Domain.Tests.ValueObjects
                     new Percentual(valor3)
                 };
 
-            Assert.Equal(new Percentual(resultado), valores.Max());
+            valores.Max().Should().BeEquivalentTo(new Percentual(resultado));
         }
     }
 }

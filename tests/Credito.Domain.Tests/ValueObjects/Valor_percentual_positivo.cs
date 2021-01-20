@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Credito.Domain.Common.ValueObjects;
+using FluentAssertions;
 using Xunit;
 
 namespace Credito.Domain.Tests.ValueObjects
@@ -54,7 +55,7 @@ namespace Credito.Domain.Tests.ValueObjects
         {
             var percentual = PercentualPositivo.FromDecimal(valor);
 
-            Assert.Equal(new PercentualPositivo(valor), percentual);
+            percentual.Should().BeEquivalentTo(new PercentualPositivo(valor));
         }
 
         [Theory]
@@ -70,7 +71,7 @@ namespace Credito.Domain.Tests.ValueObjects
         {
             PercentualPositivo percentual = valor;
 
-            Assert.Equal(new PercentualPositivo(valor), percentual);
+            percentual.Should().BeEquivalentTo(new PercentualPositivo(valor));
         }
 
         [Theory]
@@ -86,14 +87,15 @@ namespace Credito.Domain.Tests.ValueObjects
         {
             decimal percentual = PercentualPositivo.ToDecimal(PercentualPositivo.FromDecimal(valor));
 
-            Assert.Equal(valor, percentual);
+            percentual.Should().Be(valor);
         }
 
         [Theory]
         [MemberData(nameof(DadosParaAplicarPercentual))]
         public void Aplicar_percentual_positivo(decimal valor, decimal percentual, decimal resultado)
         {
-            Assert.Equal(resultado, PercentualPositivo.FromDecimal(percentual).Aplicar(valor));
+            PercentualPositivo.FromDecimal(percentual).Aplicar(valor)
+                .Should().Be(resultado);
         }
 
         [Theory]
@@ -108,7 +110,7 @@ namespace Credito.Domain.Tests.ValueObjects
                     PercentualPositivo.ToDecimal(new PercentualPositivo(valor3))
                 };
 
-            Assert.Equal(new PercentualPositivo(resultado), valores.Sum());
+            valores.Sum().Should().Be(PercentualPositivo.ToDecimal(new PercentualPositivo(resultado)));
         }
 
         [Theory]
@@ -123,7 +125,7 @@ namespace Credito.Domain.Tests.ValueObjects
                     new PercentualPositivo(valor3)
                 };
 
-            Assert.Equal(new PercentualPositivo(resultado), valores.Sum());
+            valores.Sum().Should().BeEquivalentTo(new PercentualPositivo(resultado));
         }
 
         [Theory]
@@ -138,7 +140,7 @@ namespace Credito.Domain.Tests.ValueObjects
                     new PercentualPositivo(valor3)
                 };
 
-            Assert.Equal(new PercentualPositivo(resultado), valores.Min());
+            valores.Min().Should().BeEquivalentTo(new PercentualPositivo(resultado));
         }
 
         [Theory]
@@ -153,7 +155,7 @@ namespace Credito.Domain.Tests.ValueObjects
                     new PercentualPositivo(valor3)
                 };
 
-            Assert.Equal(new PercentualPositivo(resultado), valores.Max());
+            valores.Max().Should().BeEquivalentTo(new PercentualPositivo(resultado));
         }
     }
 }
