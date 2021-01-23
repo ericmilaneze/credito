@@ -1,0 +1,55 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+
+version: '3.4'
+
+services: 
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: eric
+      MONGO_INITDB_ROOT_PASSWORD: pass
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./volumes/mongodb:/data/db
+    networks:
+      - credito-network
+
+  mongo-express:
+    image: mongo-express
+    depends_on:
+      - mongo
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ADMINUSERNAME: eric
+      ME_CONFIG_MONGODB_ADMINPASSWORD: pass
+    links:
+      - mongo
+    networks:
+      - credito-network
+
+  creditowebapi:
+    image: creditowebapi
+    depends_on:
+      - mongo
+      - mongo-express
+    build:
+      context: .
+      dockerfile: src/Credito.WebApi/Dockerfile
+    environment:
+      - CreditoDatabase__ConnectionString=mongodb://eric:pass@mongo:27017
+      - CreditoDatabase__DatabaseName=local
+    ports:
+      - 80:80
+    links:
+      - mongo
+    networks:
+      - credito-network
+
+networks: 
+  credito-network:
+    driver: bridge
