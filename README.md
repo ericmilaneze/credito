@@ -1,4 +1,4 @@
-# Crédito - ASP.NET 5 Boilerplate
+# Crédito - ASP.NET Core 5.0 Boilerplate
 
 ## Como executar
 
@@ -123,7 +123,8 @@ Banco de dados: local
 
 ## O que tem nesse sample?
 
-* ASP.NET 5
+* ASP.NET Core 5.0
+* C# 9 (record)
 * xUnit
 * MediatR
 * Serilog
