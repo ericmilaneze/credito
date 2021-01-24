@@ -1,26 +1,16 @@
-using System.Linq;
-using System.Net;
-using AutoMapper;
+using System;
 using Credito.Application;
-using Credito.Application.Common.Behaviors;
-using Credito.Domain.Common;
-using Credito.Domain.ContratoDeEmprestimo;
-using Credito.Framework.MongoDB;
-using Credito.Repository;
 using Credito.WebApi.Middlewares;
-using FluentValidation;
 using FluentValidation.AspNetCore;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Serilog;
+using Serilog.AspNetCore;
 
 namespace Credito.WebApi
 {
@@ -56,13 +46,20 @@ namespace Credito.WebApi
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
 
-            app.UseValidationExceptionHandler()
-               .UseResourceAlreadyExistsExceptionHandler();
-
-            app.UseSerilogRequestLogging()
-               .UseHttpsRedirection()
+            app.UseSerilogRequestLogging(GetSerilogConfigureOptions())
+               .UseMiddleware<SerilogAddTraceIdentifierMiddleware>()
+               .UseExceptionHandlerMiddleware()
                .UseRouting()
                .UseEndpoints(endpoints => endpoints.MapControllers());
+
+            Action<RequestLoggingOptions> GetSerilogConfigureOptions() =>
+                loggingOptions =>
+                {
+                    loggingOptions.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+                    {
+                        diagnosticContext.Set("TraceIdentifier", httpContext.TraceIdentifier);
+                    };
+                };
         }
     }
 }

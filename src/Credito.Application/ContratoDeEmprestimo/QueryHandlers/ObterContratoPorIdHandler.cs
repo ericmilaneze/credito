@@ -8,6 +8,7 @@ using Credito.Domain.ContratoDeEmprestimo;
 using MongoDB.Driver;
 using AutoMapper;
 using System.Linq;
+using Credito.Application.Common.Exceptions;
 
 namespace Credito.Application.ContratoDeEmprestimo.QueryHandlers
 {
@@ -29,6 +30,10 @@ namespace Credito.Application.ContratoDeEmprestimo.QueryHandlers
                                    .AsQueryable()
                                    .Where(x => x.Id == request.Id)
                                    .FirstOrDefault();
+            
+            if (resource == null)
+                throw new ResourceNotFoundException(request);
+
             return await Task.FromResult(_mapper.Map<ContratoDeEmprestimoModel>(resource));
         }
     }

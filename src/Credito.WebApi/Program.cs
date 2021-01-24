@@ -1,8 +1,10 @@
 using System;
+using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Serilog.Events;
+using Serilog.Filters;
 
 namespace Credito.WebApi
 {
@@ -10,11 +12,16 @@ namespace Credito.WebApi
     {
         public static int Main(string[] args)
         {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables()
+                .Build();
+
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-                .Enrich.FromLogContext()
-                .WriteTo.Console(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+                .ReadFrom.Configuration(configuration)
+                .Filter.ByExcluding(logEvent => 
+                    Matching.FromSource<Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware>().Invoke(logEvent))
                 .CreateLogger();
             
             try
