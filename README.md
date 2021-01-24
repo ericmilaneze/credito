@@ -40,7 +40,15 @@ curl --location --request POST 'http://localhost/api/contratos' \
 }'
 ```
 
-### Debug
+### Debug no Visual Studio Code
+
+Passo 1 - Execute o seguinte comando (Linux ou **cmder** no Windows):
+
+`sh docker-compose-up-debug.sh`
+
+Passo 2 - Aperte `F5` no teclado.
+
+### Debug no Visual Studio Code com docker
 
 Passo 1 - Execute o seguinte comando (Linux ou **cmder** no Windows):
 
@@ -54,7 +62,10 @@ Passo 4 - Aperte `F5` no teclado.
 
 Passo 5 - Selecione "credito" e depois "creditowebapi".
 
-Passo 6 - Para testar via **curl** (sem gravar no MongoDB):
+
+### Efetuar chamadas em modo Debug
+
+#### Testar via curl (sem gravar no MongoDB)
 
 ```
 curl --location --request POST 'http://localhost:5000/api/contratos/calculo' \
@@ -70,7 +81,7 @@ curl --location --request POST 'http://localhost:5000/api/contratos/calculo' \
 }'
 ```
 
-Passo 7 - Para testar a gravação no MongoDB via **curl**:
+#### Testar a gravação no MongoDB via curl:
 
 ```
 curl --location --request POST 'http://localhost:5000/api/contratos' \
@@ -89,7 +100,7 @@ curl --location --request POST 'http://localhost:5000/api/contratos' \
 
 ## MongoDB
 
-### Visualizar os dados e gerenciar o MongoDB local
+### Visualizar os dados e gerenciar o MongoDB local pelo mongo-express
 
 Passo 1 - Execute o seguinte comando (Linux ou **cmder** no Windows):
 
@@ -102,3 +113,35 @@ http://localhost:8081
 User: `admin`
 
 Pass: `admin`
+
+### Acessar o MongoDB local
+
+ConnectionString: mongodb://eric:pass@localhost:27017
+
+Banco de dados: local
+
+
+## O que tem nesse sample?
+
+* ASP.NET 5
+* xUnit
+* MediatR
+* Serilog
+* AutoMapper
+* MongoDB
+* Fluent Validation
+* Fluent Assertions
+* Docker
+* Docker Compose
+
+## O que pretendo adicionar nesse sample?
+
+* Swagger
+* NSubstitute
+* AWS CDK
+* AWS ECS
+* AWS Lambda
+* AWS SNS
+* AWS SQS
+* AWS Systems Manager Parameter Store
+* AWS Cognito
