@@ -121,8 +121,46 @@ ConnectionString: mongodb://eric:pass@localhost:27017
 Banco de dados: local
 
 
+## xUnit - Tests
+
+### Executar testes
+
+`dotnet test`
+
+### Code coverage com ReportGenerator
+
+#### Instalação
+
+`dotnet tool install -g dotnet-reportgenerator-globaltool`
+
+#### Usando o ReportGenerator
+
+##### Shell script linux (ou cmder no Windows)
+
+`sh run-tests-with-code-coverage-local.sh`
+
+##### Executar no Visual Studio Code
+
+Passo 1 - Abra o arquivo **keybindings.json** e adicione essa key (ou a de sua preferência):
+
+```
+{
+  "key": "ctrl+shift+alt+t",
+  "command": "workbench.action.tasks.runTask",
+  "args": "run-tests-with-code-coverage"
+}
+```
+
+Passo 2 - Aperte `ctrl+shift+alt+t` no teclado.
+
+**Alternativa** - Aperte `ctrl+shift+p` e depois digite `Tasks: Run Task`. Escolha **run-tests-with-code-coverage**.
+
+Será criado um diretório chamado **coveragereport** com um arquivo **index.html** para ser aberto pelo navegador.
+
+
 ## O que tem nesse sample?
 
+* CQRS
 * ASP.NET Core 5.0
 * C# 9 (record)
 * xUnit

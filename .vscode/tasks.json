@@ -1,6 +1,7 @@
 {
     "version": "2.0.0",
-    "tasks": [{
+    "tasks": [
+        {
             "label": "build",
             "command": "dotnet",
             "type": "process",
@@ -45,8 +46,20 @@
                 "${workspaceFolder}/docker-compose-up-debug.sh"
             ],
             "presentation": {
+                "reveal": "silent",
+                "panel": "shared"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "run-tests-with-code-coverage",
+            "command": "sh",
+            "args": [
+                "${workspaceFolder}/run-tests-with-code-coverage-local.sh"
+            ],
+            "presentation": {
                 "reveal": "always",
-                "panel": "new"
+                "panel": "shared"
             }
         }
     ]
