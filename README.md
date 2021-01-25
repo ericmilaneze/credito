@@ -126,19 +126,21 @@ Banco de dados: local
 * ASP.NET Core 5.0
 * C# 9 (record)
 * xUnit
+* NSubstitute
+* Fluent Assertions
+* DataAttribute (é criado um JsonFileDataAttribute)
 * MediatR
 * Serilog
 * AutoMapper
 * MongoDB
 * Fluent Validation
-* Fluent Assertions
 * Docker
 * Docker Compose
 
 ## O que pretendo adicionar nesse sample?
 
 * Swagger
-* NSubstitute
+* LocalStack
 * AWS CDK
 * AWS ECS
 * AWS Lambda

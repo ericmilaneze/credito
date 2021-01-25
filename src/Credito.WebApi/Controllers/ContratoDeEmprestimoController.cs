@@ -24,18 +24,18 @@ namespace Credito.WebApi.Controllers
 
         [HttpGet("{id}", Name = nameof(ObterContratoPorId))]
         public async Task<IActionResult> ObterContratoPorId(Guid id,
-                                                            CancellationToken cancellationToken = default(CancellationToken)) =>
+                                                            CancellationToken cancellationToken = default) =>
             Ok(await _mediator.Send(new ObterContratoPorIdQuery { Id = id },
                                     cancellationToken));
 
         [HttpGet]
         public async Task<IActionResult> ObterContratos([FromQuery] ObterContratosQuery query,
-                                                        CancellationToken cancellationToken = default(CancellationToken)) =>
+                                                        CancellationToken cancellationToken = default) =>
             Ok(await _mediator.Send(query, cancellationToken));
 
         [HttpPost]
         public async Task<IActionResult> CriarContrato(CriarContratoCmd cmd,
-                                                       CancellationToken cancellationToken = default(CancellationToken))
+                                                       CancellationToken cancellationToken = default)
         {
             await _mediator.Send(cmd, cancellationToken);
             return CreatedAtRoute(nameof(ObterContratoPorId),
@@ -45,7 +45,7 @@ namespace Credito.WebApi.Controllers
 
         [HttpPost("calculo")]
         public async Task<IActionResult> CalcularContrato(CalcularContratoCmd cmd,
-                                                          CancellationToken cancellationToken = default(CancellationToken)) =>
+                                                          CancellationToken cancellationToken = default) =>
             Ok(await _mediator.Send(cmd, cancellationToken));
     }
 }

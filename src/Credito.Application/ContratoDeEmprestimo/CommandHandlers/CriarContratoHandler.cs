@@ -19,7 +19,7 @@ namespace Credito.Application.ContratoDeEmprestimo.CommandHandlers
             _repository = repository;
         }
 
-        protected override async Task Handle(CriarContratoCmd request, CancellationToken cancellationToken)
+        protected override async Task Handle(CriarContratoCmd request, CancellationToken cancellationToken = default)
         {
             _logger.Information("Criando contrato com os parâmetros {@ParametrosContrato}", request);
             await CheckIfAlreadyExists(request);
