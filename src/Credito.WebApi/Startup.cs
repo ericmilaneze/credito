@@ -11,11 +11,17 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Serilog;
 using Serilog.AspNetCore;
+using Microsoft.OpenApi.Models;
 
 namespace Credito.WebApi
 {
     public class Startup
     {
+        private readonly string SWAGGER_API_NAME = "API de Crédito";
+        private readonly string SWAGGER_BASE_PATH = "api/swagger";
+        private readonly string SWAGGER_V1 = "v1";
+        private readonly string SWAGGER_V1_NAME = "Versão 1";
+
         public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
@@ -32,19 +38,38 @@ namespace Credito.WebApi
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
 
-            DependencyInjection.ConfigureServices(services);
+            AppDependencyInjection.ConfigureServices(services);
 
             services.AddMvcCore()
-                    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(DependencyInjection).Assembly))
+                    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(AppDependencyInjection).Assembly))
                     .AddDataAnnotations()
                     .AddApiExplorer();
+
+            services.AddSwaggerGen(
+                c =>
+                {
+                    c.SwaggerDoc(SWAGGER_V1, new OpenApiInfo { Title = SWAGGER_API_NAME, Version = SWAGGER_V1_NAME });
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
+            {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger(
+                    c =>
+                    {
+                        c.RouteTemplate = $"/{SWAGGER_BASE_PATH}/{{documentName}}/swagger.json";
+                    });
+                app.UseSwaggerUI(
+                    c =>
+                    {
+                        c.RoutePrefix = $"{SWAGGER_BASE_PATH}";
+                        c.SwaggerEndpoint($"/{SWAGGER_BASE_PATH}/{SWAGGER_V1}/swagger.json", $"{SWAGGER_API_NAME} - {SWAGGER_V1_NAME}");
+                    });
+            }
 
             app.UseSerilogRequestLogging(GetSerilogConfigureOptions())
                .UseMiddleware<SerilogAddTraceIdentifierMiddleware>()

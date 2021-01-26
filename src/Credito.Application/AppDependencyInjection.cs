@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Credito.Application
 {
-    public class DependencyInjection
+    public class AppDependencyInjection
     {
         public static void ConfigureServices(IServiceCollection services)
         {
@@ -32,7 +32,7 @@ namespace Credito.Application
                     .AddSingleton<IObterContratoPorId, ContratoQueries>();
 
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
-                    .AddMediatR(typeof(DependencyInjection).Assembly);
+                    .AddMediatR(typeof(AppDependencyInjection).Assembly);
         }
     }
 }

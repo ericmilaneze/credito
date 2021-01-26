@@ -98,6 +98,11 @@ curl --location --request POST 'http://localhost:5000/api/contratos' \
 ```
 
 
+## Swagger
+
+`http://localhost:5000/api/swagger/index.html`
+
+
 ## MongoDB
 
 ### Visualizar os dados e gerenciar o MongoDB local pelo mongo-express
@@ -162,22 +167,22 @@ Será criado um diretório chamado **coveragereport** com um arquivo **index.htm
 
 * CQRS
 * ASP.NET Core 5.0
+* Swagger
 * C# 9 (record)
+* AutoMapper
+* MediatR
+* Fluent Validation
 * xUnit
 * NSubstitute
 * Fluent Assertions
 * DataAttribute (é criado um JsonFileDataAttribute)
-* MediatR
 * Serilog
-* AutoMapper
 * MongoDB
-* Fluent Validation
 * Docker
 * Docker Compose
 
 ## O que pretendo adicionar nesse sample?
 
-* Swagger
 * LocalStack
 * AWS CDK
 * AWS ECS
