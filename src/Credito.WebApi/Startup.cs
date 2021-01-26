@@ -54,11 +54,13 @@ namespace Credito.WebApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
                 app.UseSwagger(
                     c =>
                     {
                         c.RouteTemplate = $"/{Globals.SWAGGER_BASE_PATH}/{{documentName}}/swagger.json";
                     });
+                    
                 app.UseSwaggerUI(
                     c =>
                     {
