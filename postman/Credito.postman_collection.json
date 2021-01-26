@@ -1,0 +1,123 @@
+{
+	"info": {
+		"_postman_id": "6c61d159-eedd-45eb-9380-58ab67e418d2",
+		"name": "Credito",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/api/contratos",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"ad801f92-1570-4d69-a2cb-b9aaf874e565\",\n    \"valorLiquido\": 3000,\n    \"quantidadeDeParcelas\": 24,\n    \"taxaAoMes\": 5.00,\n    \"tac\": 6.00,\n    \"iof\": 10.00,\n    \"diasDeCarencia\": 30\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/credito/contratos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"credito",
+						"contratos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/contratos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/credito/contratos?skip=1&take=3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"credito",
+						"contratos"
+					],
+					"query": [
+						{
+							"key": "skip",
+							"value": "1"
+						},
+						{
+							"key": "take",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/contratos/{id}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/credito/contratos/ad801f92-1570-4d69-a2cb-b9aaf874e565",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"credito",
+						"contratos",
+						"ad801f92-1570-4d69-a2cb-b9aaf874e565"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/contratos/calculo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"ad801f92-1570-4d69-a2cb-b9aaf874e55b\",\n    \"valorLiquido\": 3000,\n    \"quantidadeDeParcelas\": 24,\n    \"taxaAoMes\": 5.00,\n    \"tac\": 6.00,\n    \"iof\": 10.00,\n    \"diasDeCarencia\": 30\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/credito/contratos/calculo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"credito",
+						"contratos",
+						"calculo"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
