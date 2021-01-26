@@ -12,16 +12,12 @@ using Newtonsoft.Json.Serialization;
 using Serilog;
 using Serilog.AspNetCore;
 using Microsoft.OpenApi.Models;
+using Credito.WebApi.Misc;
 
 namespace Credito.WebApi
 {
     public class Startup
     {
-        private readonly string SWAGGER_API_NAME = "API de Crédito";
-        private readonly string SWAGGER_BASE_PATH = "api/swagger";
-        private readonly string SWAGGER_V1 = "v1";
-        private readonly string SWAGGER_V1_NAME = "Versão 1";
-
         public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
@@ -48,7 +44,7 @@ namespace Credito.WebApi
             services.AddSwaggerGen(
                 c =>
                 {
-                    c.SwaggerDoc(SWAGGER_V1, new OpenApiInfo { Title = SWAGGER_API_NAME, Version = SWAGGER_V1_NAME });
+                    c.SwaggerDoc(Globals.SWAGGER_V1, new OpenApiInfo { Title = Globals.SWAGGER_API_NAME, Version = Globals.SWAGGER_V1_NAME });
                 });
         }
 
@@ -61,13 +57,13 @@ namespace Credito.WebApi
                 app.UseSwagger(
                     c =>
                     {
-                        c.RouteTemplate = $"/{SWAGGER_BASE_PATH}/{{documentName}}/swagger.json";
+                        c.RouteTemplate = $"/{Globals.SWAGGER_BASE_PATH}/{{documentName}}/swagger.json";
                     });
                 app.UseSwaggerUI(
                     c =>
                     {
-                        c.RoutePrefix = $"{SWAGGER_BASE_PATH}";
-                        c.SwaggerEndpoint($"/{SWAGGER_BASE_PATH}/{SWAGGER_V1}/swagger.json", $"{SWAGGER_API_NAME} - {SWAGGER_V1_NAME}");
+                        c.RoutePrefix = $"{Globals.SWAGGER_BASE_PATH}";
+                        c.SwaggerEndpoint($"/{Globals.SWAGGER_BASE_PATH}/{Globals.SWAGGER_V1}/swagger.json", $"{Globals.SWAGGER_API_NAME} - {Globals.SWAGGER_V1_NAME}");
                     });
             }
 

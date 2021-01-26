@@ -4,13 +4,14 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Credito.Application.ContratoDeEmprestimo.Commands;
 using Credito.Application.ContratoDeEmprestimo.Queries;
+using Credito.WebApi.Misc;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Credito.WebApi.Controllers
 {
     [ApiController]
-    [Route("api/contratos")]
+    [Route(Globals.ROUTE_API_CONTRATOS)]
     public class ContratoDeEmprestimoController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -43,7 +44,7 @@ namespace Credito.WebApi.Controllers
                                   null);
         }
 
-        [HttpPost("calculo")]
+        [HttpPost(Globals.ROUTE_API_CONTRATOS_CALCULO)]
         public async Task<IActionResult> CalcularContrato(CalcularContratoCmd cmd,
                                                           CancellationToken cancellationToken = default) =>
             Ok(await _mediator.Send(cmd, cancellationToken));
