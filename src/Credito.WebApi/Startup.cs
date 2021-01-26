@@ -1,4 +1,3 @@
-using System;
 using Credito.Application;
 using Credito.WebApi.Middlewares;
 using FluentValidation.AspNetCore;
@@ -10,9 +9,9 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Serilog;
-using Serilog.AspNetCore;
 using Microsoft.OpenApi.Models;
 using Credito.WebApi.Misc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Credito.WebApi
 {
@@ -37,9 +36,15 @@ namespace Credito.WebApi
             AppDependencyInjection.ConfigureServices(services);
 
             services.AddMvcCore()
-                    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(AppDependencyInjection).Assembly))
                     .AddDataAnnotations()
-                    .AddApiExplorer();
+                    .AddApiExplorer()
+                    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(AppDependencyInjection).Assembly));
+
+            services.Configure<ApiBehaviorOptions>(
+                options =>
+                {
+                    options.SuppressModelStateInvalidFilter = true;
+                });
 
             services.AddSwaggerGen(
                 c =>
@@ -69,20 +74,19 @@ namespace Credito.WebApi
                     });
             }
 
-            app.UseSerilogRequestLogging(GetSerilogConfigureOptions())
-               .UseMiddleware<SerilogAddTraceIdentifierMiddleware>()
-               .UseExceptionHandlerMiddleware()
-               .UseRouting()
-               .UseEndpoints(endpoints => endpoints.MapControllers());
-
-            Action<RequestLoggingOptions> GetSerilogConfigureOptions() =>
+            app.UseSerilogRequestLogging(
                 loggingOptions =>
                 {
                     loggingOptions.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
                     {
                         diagnosticContext.Set("TraceIdentifier", httpContext.TraceIdentifier);
                     };
-                };
+                });
+
+            app.UseMiddleware<SerilogAddTraceIdentifierMiddleware>()
+               .UseExceptionHandlerMiddleware()
+               .UseRouting()
+               .UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }

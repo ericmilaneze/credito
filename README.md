@@ -11,7 +11,7 @@ Passo 1 - Execute o seguinte comando (Linux ou **cmder** no Windows):
 Passo 2 - Para testar via **curl** (sem gravar no MongoDB):
 
 ```
-curl --location --request POST 'http://localhost/api/contratos/calculo' \
+curl --location --request POST 'http://localhost/api/credito/contratos/calculo' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "id": "ad801f92-1570-4d69-a2cb-b9aaf874e55b",
@@ -27,7 +27,7 @@ curl --location --request POST 'http://localhost/api/contratos/calculo' \
 Passo 3 - Para testar a gravação no MongoDB via **curl**:
 
 ```
-curl --location --request POST 'http://localhost/api/contratos' \
+curl --location --request POST 'http://localhost/api/credito/contratos' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "id": "ad801f92-1570-4d69-a2cb-b9aaf874e55e",
@@ -68,7 +68,7 @@ Passo 5 - Selecione "credito" e depois "creditowebapi".
 #### Testar via curl (sem gravar no MongoDB)
 
 ```
-curl --location --request POST 'http://localhost:5000/api/contratos/calculo' \
+curl --location --request POST 'http://localhost:5000/api/credito/contratos/calculo' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "id": "ad801f92-1570-4d69-a2cb-b9aaf874e55b",
@@ -84,7 +84,7 @@ curl --location --request POST 'http://localhost:5000/api/contratos/calculo' \
 #### Testar a gravação no MongoDB via curl:
 
 ```
-curl --location --request POST 'http://localhost:5000/api/contratos' \
+curl --location --request POST 'http://localhost:5000/api/credito/contratos' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "id": "ad801f92-1570-4d69-a2cb-b9aaf874e55e",
@@ -100,7 +100,7 @@ curl --location --request POST 'http://localhost:5000/api/contratos' \
 
 ## Swagger
 
-`http://localhost:5000/api/swagger/index.html`
+`http://localhost:5000/api/credito/swagger/index.html`
 
 
 ## MongoDB

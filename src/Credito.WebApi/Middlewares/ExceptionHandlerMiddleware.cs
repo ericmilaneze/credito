@@ -9,6 +9,8 @@ using FluentValidation;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using Credito.WebApi.Models;
+using Newtonsoft.Json;
 
 namespace Credito.WebApi.Middlewares
 {
@@ -32,9 +34,6 @@ namespace Credito.WebApi.Middlewares
                     case ResourceAlreadyExistsException exception:
                         await HandleException(context, exception);
                         break;
-                    case Exception exception:
-                        await HandleException(context, exception);
-                        break;
                     default:
                         await HandleException(context, exceptionFeature.Error);
                         break;
@@ -47,17 +46,14 @@ namespace Credito.WebApi.Middlewares
             context.Response.Clear();
             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             await context.Response.WriteAsJsonAsync(
-                new
+                new ValidationErrorModel
                 {
                     Message = exception.Message,
                     Fields = exception.Errors
                         .GroupBy(x => x.PropertyName)
-                        .Select(x => new
-                        {
-                            Name = x.Key,
-                            ErrorMessage = x.Select(v => v.ErrorMessage)
-                        }),
-                    context.TraceIdentifier
+                        .Select(x => new ValidationErrorFieldModel(x.Key,
+                                                                   x.Select(v => v.ErrorMessage))),
+                    TraceIdentifier = context.TraceIdentifier
                 });
             await context.Response.CompleteAsync();
         }
@@ -73,12 +69,9 @@ namespace Credito.WebApi.Middlewares
 
         private static async Task WriteResourceException(HttpContext context, ResourceException exception) =>
             await context.Response.WriteAsJsonAsync(
-                new
-                {
-                    exception.Message,
-                    exception.Request,
-                    context.TraceIdentifier
-                });
+                new ResourceErrorModel(exception.Message,
+                                       JsonConvert.SerializeObject(exception.Request),
+                                       context.TraceIdentifier));
 
         private static async Task HandleException(HttpContext context, ResourceAlreadyExistsException exception)
         {
@@ -95,11 +88,8 @@ namespace Credito.WebApi.Middlewares
             context.Response.Clear();
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             await context.Response.WriteAsJsonAsync(
-                new
-                {
-                    Message = "Internal Server Error",
-                    context.TraceIdentifier
-                });
+                new DefaultErrorModel("Internal Server Error",
+                                      context.TraceIdentifier));
             await context.Response.CompleteAsync();
         }
     }
