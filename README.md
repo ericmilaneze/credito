@@ -163,6 +163,11 @@ Passo 2 - Aperte `ctrl+shift+alt+t` no teclado.
 Será criado um diretório chamado **coveragereport** com um arquivo **index.html** para ser aberto pelo navegador.
 
 
+## Postman
+
+Importe no postman o arquivo `./postman/Credito.postman_collection.json`
+
+
 ## O que tem nesse sample?
 
 * CQRS
