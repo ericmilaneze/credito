@@ -9,7 +9,7 @@ namespace Credito.WebApi.Filters
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            _logger.Verbose("Easter egg found...");
+            _logger.Verbose("Easter egg found... This is just an example.");
         }
     }
 }
