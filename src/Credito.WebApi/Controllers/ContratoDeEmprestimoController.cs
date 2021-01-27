@@ -20,12 +20,10 @@ namespace Credito.WebApi.Controllers
     public class ContratoDeEmprestimoController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IMapper _mapper;
 
-        public ContratoDeEmprestimoController(IMediator mediator, IMapper mapper)
+        public ContratoDeEmprestimoController(IMediator mediator)
         {
             _mediator = mediator;
-            _mapper = mapper;
         }
 
         [HttpGet("{id}", Name = nameof(ObterContratoPorId))]
