@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Credito.WebApi.ModelProviders;
+using Credito.WebApi.Filters;
 
 namespace Credito.WebApi
 {
@@ -39,7 +40,11 @@ namespace Credito.WebApi
             AppDependencyInjection.ConfigureServices(services);
 
             services
-                .AddMvcCore()
+                .AddMvcCore(
+                    options =>
+                    {
+                        options.Filters.Add<LoggingActionFilter>();
+                    })
                 .AddDataAnnotations()
                 .AddApiExplorer()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(AppDependencyInjection).Assembly));
