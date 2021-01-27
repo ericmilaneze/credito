@@ -17,8 +17,6 @@ namespace Credito.WebApi.Controllers
 {
     [ApiController]
     [Route(Globals.ROUTE_API_CONTRATOS)]
-    [ProducesResponseType(typeof(ValidationErrorModel), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(DefaultErrorModel), (int)HttpStatusCode.InternalServerError)]
     public class ContratoDeEmprestimoController : ControllerBase
     {
         private readonly IMediator _mediator;

@@ -12,6 +12,9 @@ using Serilog;
 using Microsoft.OpenApi.Models;
 using Credito.WebApi.Misc;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Credito.WebApi.ModelProviders;
 
 namespace Credito.WebApi
 {
@@ -35,16 +38,20 @@ namespace Credito.WebApi
 
             AppDependencyInjection.ConfigureServices(services);
 
-            services.AddMvcCore()
-                    .AddDataAnnotations()
-                    .AddApiExplorer()
-                    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(AppDependencyInjection).Assembly));
+            services
+                .AddMvcCore()
+                .AddDataAnnotations()
+                .AddApiExplorer()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(AppDependencyInjection).Assembly));
 
             services.Configure<ApiBehaviorOptions>(
                 options =>
                 {
                     options.SuppressModelStateInvalidFilter = true;
                 });
+
+            services.TryAddEnumerable(
+                ServiceDescriptor.Transient<IApplicationModelProvider, ProducesResponseTypeDefaultErrorsModelProvider>());
 
             services.AddSwaggerGen(
                 c =>
