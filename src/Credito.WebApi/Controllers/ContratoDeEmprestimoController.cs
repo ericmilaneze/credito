@@ -29,7 +29,6 @@ namespace Credito.WebApi.Controllers
         [HttpGet("{id}", Name = nameof(ObterContratoPorId))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ResourceErrorModel), (int)HttpStatusCode.NotFound)]
-        [Produces(MediaTypeNames.Application.Json)]
         public async Task<ActionResult<ContratoDeEmprestimoModel>> ObterContratoPorId(Guid id,
                                                                                       CancellationToken cancellationToken = default) =>
             Ok(await _mediator.Send(new ObterContratoPorIdQuery { Id = id },
@@ -37,17 +36,14 @@ namespace Credito.WebApi.Controllers
 
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [Produces(MediaTypeNames.Application.Json)]
         public async Task<ActionResult<IEnumerable<ContratoDeEmprestimoModel>>> ObterContratos([FromQuery] ObterContratosQuery query,
                                                                                                CancellationToken cancellationToken = default) =>
             Ok(await _mediator.Send(query, cancellationToken));
 
         [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(ResourceErrorModel), (int)HttpStatusCode.Conflict)]
-        [Consumes(MediaTypeNames.Application.Json)]
-        public async Task<IActionResult> CriarContrato(CriarContratoCmd cmd,
-                                                       CancellationToken cancellationToken = default)
+        public async Task<CreatedAtRouteResult> CriarContrato(CriarContratoCmd cmd,
+                                                              CancellationToken cancellationToken = default)
         {
             await _mediator.Send(cmd, cancellationToken);
             return CreatedAtRoute(nameof(ObterContratoPorId),
@@ -57,8 +53,6 @@ namespace Credito.WebApi.Controllers
 
         [HttpPost(Globals.ROUTE_API_CONTRATOS_CALCULO)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [Consumes(MediaTypeNames.Application.Json)]
-        [Produces(MediaTypeNames.Application.Json)]
         public async Task<ActionResult<ContratoDeEmprestimoModel>> CalcularContrato(CalcularContratoCmd cmd,
                                                                                     CancellationToken cancellationToken = default) =>
             Ok(await _mediator.Send(cmd, cancellationToken));

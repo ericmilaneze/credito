@@ -168,6 +168,13 @@ Será criado um diretório chamado **coveragereport** com um arquivo **index.htm
 Importe no postman o arquivo `./postman/Credito.postman_collection.json`
 
 
+## Logs com Serilog
+
+A configuração do serilog na API está a maior parte no arquivo `appsettings.json`, mas também existe tanto mais configuração quanto a própria chamada no arquivo `Program.cs`.
+
+O template de saída do log da API (`appsettings.json`) tem o parâmetro `{TraceIdentifier}`, que poderia ser facilmente substituído por `{RequestId}`, mas é usado o `{TraceIdentifier}` para ter um exemplo de como "enriquecer" o log. Esse "enriquecimento" é feito no arquivo `Startup.cs`. Porém, repetindo: colocar `{RequestId}` teria o mesmo efeito prático, que é colocar o `TraceIdentifier` do `HttpContext`.
+
+
 ## O que tem nesse sample?
 
 * CQRS
