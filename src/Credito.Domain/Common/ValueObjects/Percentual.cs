@@ -15,7 +15,7 @@ namespace Credito.Domain.Common.ValueObjects
         public decimal Aplicar(int valorTodo) =>
             valorTodo * ObterPercentual();
 
-        public ValorMonetario Aplicar(ValueFromDecimal valorTodo) =>
+        public decimal Aplicar(ValueFromDecimal valorTodo) =>
             ValueFromDecimal.ToDecimal(valorTodo) * ObterPercentual();
 
         public ValorMonetario Aplicar(ValorMonetario valorTodo) =>
@@ -64,6 +64,6 @@ namespace Credito.Domain.Common.ValueObjects
             v1.ObterPercentual() / v2;
 
         public static decimal operator /(Percentual v1, double v2) =>
-            v1.ObterPercentual() / Decimal.Parse(v2.ToString());
+            v1 / Decimal.Parse(v2.ToString());
     }
 }

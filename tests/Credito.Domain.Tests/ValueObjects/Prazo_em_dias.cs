@@ -42,6 +42,13 @@ namespace Credito.Domain.Tests.ValueObjects
                 new object[] { 10, 20, 30, 30 }
             };
 
+        public static IEnumerable<object[]> Subtracao =>
+            new List<object[]>
+            {
+                new object[] { 10, 5, 5 },
+                new object[] { 49, 7, 42 }
+            };
+
         [Theory]
         [MemberData(nameof(DadosDeConversaoOuCriacao))]
         public void Criar_prazo_em_dias_de_int(int valor)
@@ -141,6 +148,26 @@ namespace Credito.Domain.Tests.ValueObjects
                 };
 
             valores.Max().Should().BeEquivalentTo(new Prazo(resultado));
+        }
+
+        [Theory]
+        [MemberData(nameof(DadosDeConversaoOuCriacao))]
+        public void Prazo_to_int_nullable(int valor)
+        {
+            var prazo = Prazo.FromInt(valor);
+            int? prazoAsIntNullable = ValueFromInt.ToIntNullable(prazo);
+
+            prazoAsIntNullable.Should().Be(prazoAsIntNullable);
+        }
+
+        [Theory]
+        [MemberData(nameof(Subtracao))]
+        public void Prazo_subtract_operator(int valor1, int valor2, int resultado)
+        {
+            var prazo1 = Prazo.FromInt(valor1);
+            var prazo2 = Prazo.FromInt(valor2);
+            var res = prazo1 - prazo2;
+            res.Should().Be(resultado);
         }
     }
 }

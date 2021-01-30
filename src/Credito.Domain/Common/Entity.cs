@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Credito.Domain.Common
 {
@@ -6,6 +7,7 @@ namespace Credito.Domain.Common
     {
         public Guid Id { get; private set; }
 
+        [ExcludeFromCodeCoverage]
         protected Entity() { }
 
         protected Entity(Guid id) =>

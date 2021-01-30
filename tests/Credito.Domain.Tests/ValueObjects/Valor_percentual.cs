@@ -18,6 +18,13 @@ namespace Credito.Domain.Tests.ValueObjects
                 new object[] { -71.97M }
             };
 
+        public static IEnumerable<object[]> DadosIntParaAplicarPercentual =>
+            new List<object[]>
+            {
+                new object[] { 100, 25.20M, 25.20M },
+                new object[] { 50, 10.00M, 5M }
+            };
+
         public static IEnumerable<object[]> DadosParaAplicarPercentual =>
             new List<object[]>
             {
@@ -84,6 +91,56 @@ namespace Credito.Domain.Tests.ValueObjects
         {
             Percentual.FromDecimal(percentual).Aplicar(valor)
                 .Should().Be(resultado);
+        }
+
+        [Theory]
+        [MemberData(nameof(DadosParaAplicarPercentual))]
+        public void Aplicar_percentual_multiply_operator(decimal valor, decimal percentual, decimal resultado)
+        {
+            var res = Percentual.FromDecimal(percentual) * valor;
+            res.Should().Be(resultado);
+        }
+
+        [Theory]
+        [MemberData(nameof(DadosParaAplicarPercentual))]
+        public void Aplicar_percentual_value_from_decimal(decimal valor, decimal percentual, decimal resultado)
+        {
+            var valueFromDecimal = Percentual.FromDecimal(valor);
+            Percentual.FromDecimal(percentual).Aplicar(valueFromDecimal)
+                .Should().Be(resultado);
+        }
+
+        [Theory]
+        [MemberData(nameof(DadosParaAplicarPercentual))]
+        public void Aplicar_percentual_value_from_decimal_multiply_operator(decimal valor, decimal percentual, decimal resultado)
+        {
+            var valueFromDecimal = Percentual.FromDecimal(valor);
+            var res = Percentual.FromDecimal(percentual) * valueFromDecimal;
+            res.Should().Be(resultado);
+        }
+
+        [Theory]
+        [MemberData(nameof(DadosIntParaAplicarPercentual))]
+        public void Aplicar_percentual_valor_int(int valor, decimal percentual, decimal resultado)
+        {
+            Percentual.FromDecimal(percentual).Aplicar(valor)
+                .Should().Be(resultado);
+        }
+
+        [Theory]
+        [MemberData(nameof(DadosIntParaAplicarPercentual))]
+        public void Aplicar_percentual_valor_int_multiply_operator(int valor, decimal percentual, decimal resultado)
+        {
+            var res = Percentual.FromDecimal(percentual) * valor;
+            res.Should().Be(resultado);
+        }
+
+        [Theory]
+        [MemberData(nameof(DadosIntParaAplicarPercentual))]
+        public void Aplicar_percentual_value_from_int_multiply_operator(int valor, decimal percentual, decimal resultado)
+        {
+            var res = Percentual.FromDecimal(percentual) * Prazo.FromInt(valor);
+            res.Should().Be(resultado);
         }
 
         [Theory]

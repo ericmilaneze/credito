@@ -15,10 +15,11 @@ namespace Credito.Domain.Tests.ContratoDeEmprestimo
         [ContratosDataAttribute("contratos.json")]
         public void Criar_contrato(ContratoData data)
         {
+            var id = Guid.NewGuid();
             var contrato = ContratoDeEmprestimoAggregate.CriarContrato(
                 new ParametrosDeContratoDeEmprestimo
                 {
-                    Id = Guid.NewGuid(),
+                    Id = id,
                     ValorLiquido = data.ValorLiquido,
                     QuantidadeDeParcelas = data.Prazo,
                     TaxaAoMes = data.TaxaAoMes,
@@ -27,6 +28,7 @@ namespace Credito.Domain.Tests.ContratoDeEmprestimo
                     DiasDeCarencia = data.DiasDeCarencia
                 });
 
+            contrato.Id.Should().Be(id);
             contrato.TaxaAoDia.Should().BeEquivalentTo(new Percentual(data.TaxaAoDia));
             contrato.ValorCarencia.Should().BeEquivalentTo(new ValorMonetario(data.ValorCarencia));
             contrato.ValorFinanciado.Should().BeEquivalentTo(new ValorMonetario(data.ValorFinanciado));

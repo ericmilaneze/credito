@@ -5,9 +5,7 @@ namespace Credito.Domain.Common.ValueObjects
     public record NumeroParcela : ValueFromInt
     {
         internal NumeroParcela(int valor) : base(valor)
-        {
-            
-        }
+        { }
 
         public bool IsFirst =>
             _valor == 1;

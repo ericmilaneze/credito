@@ -5,9 +5,7 @@ namespace Credito.Domain.Common.ValueObjects
     public record Prazo : ValueFromInt
     {
         internal Prazo(int valor) : base(valor)
-        {
-            
-        }
+        { }
 
         public override string ToString() =>
             $"{_valor}";

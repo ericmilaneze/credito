@@ -1,9 +1,11 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Credito.Domain.Common
 {
     public abstract class AggregateRoot : Entity
     {
+        [ExcludeFromCodeCoverage]
         protected AggregateRoot()
         { }
 
