@@ -1,12 +1,12 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Credito.Application.Models;
+using Credito.Application.v1_0.Models;
 using MediatR;
-using Credito.Application.ContratoDeEmprestimo.Queries;
+using Credito.Application.v1_0.ContratoDeEmprestimo.Queries;
 using Credito.Application.Common.Exceptions;
-using Credito.Application.ContratoDeEmprestimo.QueryHandlers.QueryImplementations.Interfaces;
+using Credito.Application.v1_0.ContratoDeEmprestimo.QueryHandlers.QueryImplementations.Interfaces;
 
-namespace Credito.Application.ContratoDeEmprestimo.QueryHandlers
+namespace Credito.Application.v1_0.ContratoDeEmprestimo.QueryHandlers
 {
     public class ObterContratoPorIdHandler : IRequestHandler<ObterContratoPorIdQuery, ContratoDeEmprestimoModel>
     {

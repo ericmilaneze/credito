@@ -1,5 +1,3 @@
-using System;
-
 namespace Credito.Application.Common.Exceptions
 {
     public class ResourceAlreadyExistsException : ResourceException

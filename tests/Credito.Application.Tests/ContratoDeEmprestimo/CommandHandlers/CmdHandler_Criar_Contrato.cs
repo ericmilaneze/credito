@@ -2,15 +2,15 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credito.Application.Common.Exceptions;
-using Credito.Application.ContratoDeEmprestimo.CommandHandlers;
-using Credito.Application.ContratoDeEmprestimo.Commands;
+using Credito.Application.v1_0.ContratoDeEmprestimo.CommandHandlers;
+using Credito.Application.v1_0.ContratoDeEmprestimo.Commands;
 using Credito.Domain.ContratoDeEmprestimo;
 using FluentAssertions;
 using MediatR;
 using NSubstitute;
 using Xunit;
 
-namespace Credito.Application.Tests.ContratoDeEmprestimo.CommandHandlers
+namespace Credito.Application.v1_0.Tests.ContratoDeEmprestimo.CommandHandlers
 {
     public class CmdHandler_Criar_Contrato
     {

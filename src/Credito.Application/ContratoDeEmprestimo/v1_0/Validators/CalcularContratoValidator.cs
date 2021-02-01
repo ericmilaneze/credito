@@ -1,7 +1,7 @@
-using Credito.Application.ContratoDeEmprestimo.Commands;
+using Credito.Application.v1_0.ContratoDeEmprestimo.Commands;
 using FluentValidation;
 
-namespace Credito.Application.ContratoDeEmprestimo.Validators
+namespace Credito.Application.v1_0.ContratoDeEmprestimo.Validators
 {
     public class CalcularContratoValidator : AbstractValidator<CalcularContratoCmd>
     {

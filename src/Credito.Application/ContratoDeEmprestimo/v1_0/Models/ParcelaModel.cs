@@ -1,4 +1,4 @@
-namespace Credito.Application.Models
+namespace Credito.Application.v1_0.Models
 {
     public record ParcelaModel
     {

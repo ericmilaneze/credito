@@ -1,25 +1,25 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Credito.Application.Common.Exceptions;
-using Credito.Application.ContratoDeEmprestimo.Commands;
+using Credito.Application.v1_0.ContratoDeEmprestimo.Commands;
 using Credito.Domain.ContratoDeEmprestimo;
 using MediatR;
 using Serilog;
 
-namespace Credito.Application.ContratoDeEmprestimo.CommandHandlers
+namespace Credito.Application.v1_0.ContratoDeEmprestimo.CommandHandlers
 {
-    public class CriarContratoV2Handler : AsyncRequestHandler<CriarContratoCmdV2>
+    public class CriarContratoHandler : AsyncRequestHandler<CriarContratoCmd>
     {
-        private static readonly ILogger _logger = Log.ForContext(typeof(CriarContratoV2Handler));
+        private static readonly ILogger _logger = Log.ForContext(typeof(CriarContratoHandler));
 
         private readonly IContratoDeEmprestimoRepository _repository;
 
-        public CriarContratoV2Handler(IContratoDeEmprestimoRepository repository)
+        public CriarContratoHandler(IContratoDeEmprestimoRepository repository)
         {
             _repository = repository;
         }
 
-        protected override async Task Handle(CriarContratoCmdV2 request, CancellationToken cancellationToken = default)
+        protected override async Task Handle(CriarContratoCmd request, CancellationToken cancellationToken = default)
         {
             _logger.Information("Criando contrato com os parâmetros {@ParametrosContrato}", request);
             await CheckIfAlreadyExists(request);
@@ -38,7 +38,7 @@ namespace Credito.Application.ContratoDeEmprestimo.CommandHandlers
                 cancellationToken);
         }
 
-        private async Task CheckIfAlreadyExists(CriarContratoCmdV2 request)
+        private async Task CheckIfAlreadyExists(CriarContratoCmd request)
         {
             var resource = await _repository.LoadAsync(request.Id);
             if (resource != null)

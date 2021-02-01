@@ -1,12 +1,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Credito.Application.Common.Exceptions;
-using Credito.Application.ContratoDeEmprestimo.Commands;
+using Credito.Application.v2_0.ContratoDeEmprestimo.Commands;
 using Credito.Domain.ContratoDeEmprestimo;
 using MediatR;
 using Serilog;
 
-namespace Credito.Application.ContratoDeEmprestimo.CommandHandlers
+namespace Credito.Application.v2_0.ContratoDeEmprestimo.CommandHandlers
 {
     public class CriarContratoHandler : AsyncRequestHandler<CriarContratoCmd>
     {

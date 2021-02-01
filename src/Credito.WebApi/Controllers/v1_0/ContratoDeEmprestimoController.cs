@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Credito.Application.ContratoDeEmprestimo.Commands;
-using Credito.Application.ContratoDeEmprestimo.Queries;
-using Credito.Application.Models;
+using Credito.Application.v1_0.ContratoDeEmprestimo.Commands;
+using Credito.Application.v1_0.ContratoDeEmprestimo.Queries;
+using Credito.Application.v1_0.Models;
 using Credito.WebApi.Misc;
 using Credito.WebApi.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Credito.WebApi.Controllers
+namespace Credito.WebApi.Controllers.v1_0
 {
     [ApiController]
     [Route(Globals.ROUTE_API_CONTRATOS)]
@@ -24,7 +24,7 @@ namespace Credito.WebApi.Controllers
         public ContratoDeEmprestimoController(IMediator mediator) =>
             _mediator = mediator;
 
-        [HttpGet("{id}", Name = nameof(ObterContratoPorId))]
+        [HttpGet("{id}", Name = Globals.ROUTE_API_CONTRATOS_CRIAR_ROUTE_NAME)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ResourceErrorModel), (int)HttpStatusCode.NotFound)]
         public async Task<ActionResult<ContratoDeEmprestimoModel>> ObterContratoPorId(Guid id,
@@ -39,21 +39,10 @@ namespace Credito.WebApi.Controllers
             Ok(await _mediator.Send(query, cancellationToken));
 
         [HttpPost]
+        [MapToApiVersion("1.0")]
         [ProducesResponseType(typeof(ResourceErrorModel), (int)HttpStatusCode.Conflict)]
         public async Task<CreatedAtRouteResult> CriarContrato(CriarContratoCmd cmd,
                                                               CancellationToken cancellationToken = default)
-        {
-            await _mediator.Send(cmd, cancellationToken);
-            return CreatedAtRoute(nameof(ObterContratoPorId),
-                                  new { cmd.Id },
-                                  null);
-        }
-
-        [HttpPost]
-        [MapToApiVersion("2.0")]
-        [ProducesResponseType(typeof(ResourceErrorModel), (int)HttpStatusCode.Conflict)]
-        public async Task<CreatedAtRouteResult> CriarContratoV2(CriarContratoCmdV2 cmd,
-                                                                CancellationToken cancellationToken = default)
         {
             await _mediator.Send(cmd, cancellationToken);
             return CreatedAtRoute(nameof(ObterContratoPorId),

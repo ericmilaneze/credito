@@ -1,7 +1,7 @@
 using AutoMapper;
 using Credito.Domain.Common.ValueObjects;
 using Credito.Domain.ContratoDeEmprestimo;
-using Credito.Application.Models;
+using Credito.Application.v1_0.Models;
 
 namespace Credito.Application
 {

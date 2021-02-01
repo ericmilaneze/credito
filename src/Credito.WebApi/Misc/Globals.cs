@@ -9,5 +9,6 @@ namespace Credito.WebApi.Misc
 
         public const string ROUTE_API_CONTRATOS = "api/credito/contratos";
         public const string ROUTE_API_CONTRATOS_CALCULO = "calculo";
+        public const string ROUTE_API_CONTRATOS_CRIAR_ROUTE_NAME = "ObterContratoPorId";
     }
 }

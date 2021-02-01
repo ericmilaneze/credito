@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Credito.Application.ContratoDeEmprestimo.Queries;
-using Credito.Application.ContratoDeEmprestimo.QueryHandlers;
-using Credito.Application.ContratoDeEmprestimo.QueryHandlers.QueryImplementations.Interfaces;
-using Credito.Application.Models;
+using Credito.Application.v1_0.ContratoDeEmprestimo.Queries;
+using Credito.Application.v1_0.ContratoDeEmprestimo.QueryHandlers;
+using Credito.Application.v1_0.ContratoDeEmprestimo.QueryHandlers.QueryImplementations.Interfaces;
+using Credito.Application.v1_0.Models;
 using FluentAssertions;
 using NSubstitute;
 using Xunit;
 
-namespace Credito.Application.Tests.ContratoDeEmprestimo.QueryHandlers
+namespace Credito.Application.v1_0.Tests.ContratoDeEmprestimo.QueryHandlers
 {
     public class QryHandler_ObterContratos
     {

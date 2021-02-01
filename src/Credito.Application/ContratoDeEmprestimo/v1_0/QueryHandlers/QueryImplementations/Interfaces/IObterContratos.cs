@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Credito.Application.ContratoDeEmprestimo.Queries;
-using Credito.Application.Models;
+using Credito.Application.v1_0.ContratoDeEmprestimo.Queries;
+using Credito.Application.v1_0.Models;
 
-namespace Credito.Application.ContratoDeEmprestimo.QueryHandlers.QueryImplementations.Interfaces
+namespace Credito.Application.v1_0.ContratoDeEmprestimo.QueryHandlers.QueryImplementations.Interfaces
 {
     public interface IObterContratos
     {

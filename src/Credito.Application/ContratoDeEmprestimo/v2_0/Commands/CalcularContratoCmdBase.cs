@@ -1,6 +1,4 @@
-using System;
-
-namespace Credito.Application.ContratoDeEmprestimo.Commands
+namespace Credito.Application.v2_0.ContratoDeEmprestimo.Commands
 {
     public record CalcularContratoCmdBase
     {

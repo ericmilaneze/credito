@@ -179,6 +179,7 @@ O template de saída do log da API (`appsettings.json`) tem o parâmetro `{Trace
 
 * CQRS
 * ASP.NET Core 5.0
+* API Versioning
 * Swagger
 * C# 9 (record)
 * AutoMapper

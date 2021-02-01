@@ -3,14 +3,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Credito.Application.ContratoDeEmprestimo.Queries;
-using Credito.Application.ContratoDeEmprestimo.QueryHandlers.QueryImplementations.Interfaces;
-using Credito.Application.Models;
+using Credito.Application.v1_0.ContratoDeEmprestimo.Queries;
+using Credito.Application.v1_0.ContratoDeEmprestimo.QueryHandlers.QueryImplementations.Interfaces;
+using Credito.Application.v1_0.Models;
 using Credito.Domain.ContratoDeEmprestimo;
 using Credito.Framework.MongoDB;
 using MongoDB.Driver;
 
-namespace Credito.Application.ContratoDeEmprestimo.QueryHandlers.QueryImplementations
+namespace Credito.Application.v1_0.ContratoDeEmprestimo.QueryHandlers.QueryImplementations
 {
     public class ContratoQueries : IObterContratos, IObterContratoPorId
     {

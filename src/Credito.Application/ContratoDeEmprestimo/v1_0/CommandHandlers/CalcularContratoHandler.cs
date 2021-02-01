@@ -2,12 +2,12 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Credito.Application.ContratoDeEmprestimo.Commands;
-using Credito.Application.Models;
+using Credito.Application.v1_0.ContratoDeEmprestimo.Commands;
+using Credito.Application.v1_0.Models;
 using Credito.Domain.ContratoDeEmprestimo;
 using MediatR;
 
-namespace Credito.Application.ContratoDeEmprestimo.CommandHandlers
+namespace Credito.Application.v1_0.ContratoDeEmprestimo.CommandHandlers
 {
     public class CalcularContratoHandler : IRequestHandler<CalcularContratoCmd, ContratoDeEmprestimoModel>
     {

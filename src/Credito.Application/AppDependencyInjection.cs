@@ -1,8 +1,8 @@
 using AutoMapper;
 using Credito.Application.Common.Behaviors;
 using Credito.Application.Common.Settings;
-using Credito.Application.ContratoDeEmprestimo.QueryHandlers.QueryImplementations;
-using Credito.Application.ContratoDeEmprestimo.QueryHandlers.QueryImplementations.Interfaces;
+using Credito.Application.v1_0.ContratoDeEmprestimo.QueryHandlers.QueryImplementations;
+using Credito.Application.v1_0.ContratoDeEmprestimo.QueryHandlers.QueryImplementations.Interfaces;
 using Credito.Domain.Common;
 using Credito.Domain.ContratoDeEmprestimo;
 using Credito.Framework.MongoDB;
