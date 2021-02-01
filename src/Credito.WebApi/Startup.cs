@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Credito.WebApi.ModelProviders;
 using Credito.WebApi.Filters;
+using Microsoft.AspNetCore.Mvc.Versioning;
 
 namespace Credito.WebApi
 {
@@ -48,6 +49,15 @@ namespace Credito.WebApi
                 .AddDataAnnotations()
                 .AddApiExplorer()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(AppDependencyInjection).Assembly));
+
+            services.AddApiVersioning(
+                config =>
+                {
+                    config.DefaultApiVersion = new ApiVersion(1, 0);
+                    config.AssumeDefaultVersionWhenUnspecified = true;
+                    config.ReportApiVersions = true;
+                    config.ApiVersionReader = new HeaderApiVersionReader("api-version");
+                });
 
             services.Configure<ApiBehaviorOptions>(
                 options =>

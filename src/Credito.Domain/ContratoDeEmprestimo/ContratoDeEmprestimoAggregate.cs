@@ -12,6 +12,7 @@ namespace Credito.Domain.ContratoDeEmprestimo
     {
         private ICollection<Parcela> _parcelas = new Collection<Parcela>();
 
+        public Guid ClienteId { get; private set; }
         public ValorMonetarioPositivo ValorLiquido { get; private set; }
         public Prazo QuantidadeDeParcelas { get; private set; }
         public PercentualPositivo TaxaAoMes { get; private set; }
@@ -45,6 +46,7 @@ namespace Credito.Domain.ContratoDeEmprestimo
         private ContratoDeEmprestimoAggregate(ParametrosDeContratoDeEmprestimo parametros)
             : base(parametros.Id)
         {
+            ClienteId = parametros.ClienteId;
             ValorLiquido = parametros.ValorLiquido;
             QuantidadeDeParcelas = parametros.QuantidadeDeParcelas;
             TaxaAoMes = parametros.TaxaAoMes;
@@ -82,6 +84,7 @@ namespace Credito.Domain.ContratoDeEmprestimo
         public record ParametrosDeContratoDeEmprestimo
         {
             public Guid Id { get; init; }
+            public Guid ClienteId { get; init; }
             public ValorMonetarioPositivo ValorLiquido { get; init; }
             public Prazo QuantidadeDeParcelas { get; init; }
             public PercentualPositivo TaxaAoMes { get; init; }

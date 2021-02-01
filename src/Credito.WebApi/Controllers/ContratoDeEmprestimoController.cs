@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Net.Mime;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using Credito.Application.ContratoDeEmprestimo.Commands;
 using Credito.Application.ContratoDeEmprestimo.Queries;
 using Credito.Application.Models;
@@ -17,14 +15,14 @@ namespace Credito.WebApi.Controllers
 {
     [ApiController]
     [Route(Globals.ROUTE_API_CONTRATOS)]
+    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     public class ContratoDeEmprestimoController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public ContratoDeEmprestimoController(IMediator mediator)
-        {
+        public ContratoDeEmprestimoController(IMediator mediator) =>
             _mediator = mediator;
-        }
 
         [HttpGet("{id}", Name = nameof(ObterContratoPorId))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -44,6 +42,18 @@ namespace Credito.WebApi.Controllers
         [ProducesResponseType(typeof(ResourceErrorModel), (int)HttpStatusCode.Conflict)]
         public async Task<CreatedAtRouteResult> CriarContrato(CriarContratoCmd cmd,
                                                               CancellationToken cancellationToken = default)
+        {
+            await _mediator.Send(cmd, cancellationToken);
+            return CreatedAtRoute(nameof(ObterContratoPorId),
+                                  new { cmd.Id },
+                                  null);
+        }
+
+        [HttpPost]
+        [MapToApiVersion("2.0")]
+        [ProducesResponseType(typeof(ResourceErrorModel), (int)HttpStatusCode.Conflict)]
+        public async Task<CreatedAtRouteResult> CriarContratoV2(CriarContratoCmdV2 cmd,
+                                                                CancellationToken cancellationToken = default)
         {
             await _mediator.Send(cmd, cancellationToken);
             return CreatedAtRoute(nameof(ObterContratoPorId),

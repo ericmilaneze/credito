@@ -4,7 +4,6 @@ namespace Credito.Application.ContratoDeEmprestimo.Commands
 {
     public record CalcularContratoCmdBase
     {
-        public Guid Id { get; init; }
         public decimal ValorLiquido { get; init; }
         public int QuantidadeDeParcelas { get; init; }
         public decimal TaxaAoMes { get; init; }

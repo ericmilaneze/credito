@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 
 namespace Credito.Application.Models
 {
     public record ContratoDeEmprestimoModel
     {
+        public Guid Id { get; init; }
         public decimal ValorLiquido { get; init; }
         public int QuantidadeDeParcelas { get; init; }
         public decimal TaxaAoMes { get; init; }

@@ -3,7 +3,7 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
 WORKDIR /src
 COPY ["src/Credito.WebApi/Credito.WebApi.csproj", "src/Credito.WebApi/"]
 RUN dotnet restore "src/Credito.WebApi/Credito.WebApi.csproj"

@@ -1,4 +1,4 @@
-# Crédito - ASP.NET Core 5.0 Boilerplate
+# Crédito - Sample of ASP.NET Core 5.0 (Web API)
 
 ## Como executar
 

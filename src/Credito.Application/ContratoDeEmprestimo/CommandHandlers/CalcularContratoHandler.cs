@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -20,7 +21,7 @@ namespace Credito.Application.ContratoDeEmprestimo.CommandHandlers
                 ContratoDeEmprestimoAggregate.CriarContrato(
                     new ContratoDeEmprestimoAggregate.ParametrosDeContratoDeEmprestimo
                     {
-                        Id = request.Id,
+                        Id = Guid.NewGuid(),
                         ValorLiquido = request.ValorLiquido,
                         QuantidadeDeParcelas = request.QuantidadeDeParcelas,
                         TaxaAoMes = request.TaxaAoMes,
