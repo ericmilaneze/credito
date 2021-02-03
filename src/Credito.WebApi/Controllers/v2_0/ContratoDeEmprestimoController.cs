@@ -29,5 +29,11 @@ namespace Credito.WebApi.Controllers.v2_0
                                   new { cmd.Id },
                                   null);
         }
+
+        [HttpGet("get-v2")]
+        [MapToApiVersion("2.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public IActionResult TesteV2() =>
+            Ok("v2");
     }
 }

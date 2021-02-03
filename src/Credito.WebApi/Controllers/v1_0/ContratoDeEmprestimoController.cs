@@ -55,5 +55,11 @@ namespace Credito.WebApi.Controllers.v1_0
         public async Task<ActionResult<ContratoDeEmprestimoModel>> CalcularContrato(CalcularContratoCmd cmd,
                                                                                     CancellationToken cancellationToken = default) =>
             Ok(await _mediator.Send(cmd, cancellationToken));
+
+        [HttpGet("get-v1")]
+        [MapToApiVersion("1.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public IActionResult TesteV1() =>
+            Ok("v1");
     }
 }
