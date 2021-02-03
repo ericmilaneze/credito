@@ -13,26 +13,21 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Credito.Application
 {
-    public class AppDependencyInjection
+    public static class AppDependencyInjection
     {
-        public static void ConfigureServices(IServiceCollection services)
-        {
-            var serviceProvider = services.BuildServiceProvider();
-            var configuration = serviceProvider.GetService<IConfiguration>();
-
-            services.AddAutoMapper(typeof(MappingProfile).Assembly);
-
-            var creditoDatabaseSettings = configuration.GetSection("CreditoDatabase").Get<CreditoDatabaseSettings>();
-            services.AddSingleton<IMongoDbContext>(new MongoDbContext(creditoDatabaseSettings.ConnectionString,
-                                                                      creditoDatabaseSettings.DatabaseName));
-
-            services.AddSingleton<IDbRepository<ContratoDeEmprestimoAggregate>, MongoDbRepository<ContratoDeEmprestimoAggregate>>()
-                    .AddSingleton<IContratoDeEmprestimoRepository, ContratoDeEmprestimoRepository>()
-                    .AddSingleton<IObterContratos, ContratoQueries>()
-                    .AddSingleton<IObterContratoPorId, ContratoQueries>();
-
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
-                    .AddMediatR(typeof(AppDependencyInjection).Assembly);
-        }
+        public static IServiceCollection ConfigureServices(this IServiceCollection services,
+                                                           IConfiguration configuration) =>
+            services
+                .AddAutoMapper(typeof(MappingProfile).Assembly)
+                .AddSingleton((IMongoDbContext)new MongoDbContext(configuration.GetSection("CreditoDatabase")
+                                                                               .Get<CreditoDatabaseSettings>().ConnectionString,
+                                                                  configuration.GetSection("CreditoDatabase")
+                                                                               .Get<CreditoDatabaseSettings>().DatabaseName))
+                .AddSingleton<IDbRepository<ContratoDeEmprestimoAggregate>, MongoDbRepository<ContratoDeEmprestimoAggregate>>()
+                .AddSingleton<IContratoDeEmprestimoRepository, ContratoDeEmprestimoRepository>()
+                .AddSingleton<IObterContratos, ContratoQueries>()
+                .AddSingleton<IObterContratoPorId, ContratoQueries>()
+                .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
+                .AddMediatR(typeof(AppDependencyInjection).Assembly);
     }
 }

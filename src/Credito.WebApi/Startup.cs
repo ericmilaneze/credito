@@ -9,18 +9,9 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Serilog;
-using Credito.WebApi.Misc;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using Credito.WebApi.ModelProviders;
 using Credito.WebApi.Filters;
-using Microsoft.AspNetCore.Mvc.Versioning;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using Microsoft.Extensions.Options;
-using Credito.WebApi.SwaggerConfigurations;
+using Credito.WebApi.StartupExtensions;
 
 namespace Credito.WebApi
 {
@@ -42,9 +33,8 @@ namespace Credito.WebApi
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
 
-            AppDependencyInjection.ConfigureServices(services);
-
             services
+                .ConfigureServices(Configuration)
                 .AddMvcCore(
                     options =>
                     {
@@ -52,41 +42,11 @@ namespace Credito.WebApi
                     })
                 .AddDataAnnotations()
                 .AddApiExplorer()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(AppDependencyInjection).Assembly));
-
-            services.AddApiVersioning(
-                config =>
-                {
-                    config.DefaultApiVersion = new ApiVersion(1, 0);
-                    config.AssumeDefaultVersionWhenUnspecified = true;
-                    config.ReportApiVersions = true;
-                    config.ApiVersionReader = new HeaderApiVersionReader(Globals.API_VERSION_HEADER);
-                });
-
-            services.AddVersionedApiExplorer(
-                options =>
-                {
-                    options.GroupNameFormat = "'v'VVV";
-                    options.ApiVersionParameterSource = new HeaderApiVersionReader(Globals.API_VERSION_HEADER);
-                    options.AssumeDefaultVersionWhenUnspecified = true;
-                });
-
-            services.Configure<ApiBehaviorOptions>(
-                options =>
-                {
-                    options.SuppressModelStateInvalidFilter = true;
-                });
-
-            services.TryAddEnumerable(
-                ServiceDescriptor.Transient<IApplicationModelProvider, ProducesResponseTypeDefaultErrorsModelProvider>());
-
-            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-            services.AddSwaggerGen(
-                options =>
-                {
-                    options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
-                    options.OperationFilter<SwaggerDefaultValues>();
-                });
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(AppDependencyInjection).Assembly))
+                .Services
+                .AddVersioning()
+                .AddDefaultErrorResponsesConfiguration()
+                .AddSwagger();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -97,35 +57,16 @@ namespace Credito.WebApi
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
 
-            app.UseSwagger(
-                options =>
-                {
-                    options.RouteTemplate = $"/{Globals.SWAGGER_BASE_PATH}/{{documentName}}/swagger.json";
-                });
-
-            app.UseSwaggerUI(
-                options =>
-                {
-                    foreach (var description in provider.ApiVersionDescriptions)
+            app.UseSwaggerConfiguration(env, provider)
+               .UseSerilogRequestLogging(
+                   loggingOptions =>
                     {
-                        options.RoutePrefix = $"{Globals.SWAGGER_BASE_PATH}";
-                        options.SwaggerEndpoint($"/{Globals.SWAGGER_BASE_PATH}/{description.GroupName}/swagger.json", $"{Globals.SWAGGER_API_NAME} - {description.GroupName.ToUpperInvariant()}");
-                    }
-
-                    options.DisplayOperationId();
-                    options.DisplayRequestDuration();
-                });
-
-            app.UseSerilogRequestLogging(
-                loggingOptions =>
-                {
-                    loggingOptions.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
-                    {
-                        diagnosticContext.Set("TraceIdentifier", httpContext.TraceIdentifier);
-                    };
-                });
-
-            app.UseMiddleware<SerilogAddTraceIdentifierMiddleware>()
+                        loggingOptions.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+                        {
+                            diagnosticContext.Set("TraceIdentifier", httpContext.TraceIdentifier);
+                        };
+                    })
+               .UseMiddleware<SerilogAddTraceIdentifierMiddleware>()
                .UseExceptionHandlerMiddleware()
                .UseRouting()
                .UseEndpoints(endpoints => endpoints.MapControllers());
