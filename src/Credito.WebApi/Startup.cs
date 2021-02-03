@@ -57,19 +57,20 @@ namespace Credito.WebApi
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
 
-            app.UseSwaggerConfiguration(env, provider)
-               .UseSerilogRequestLogging(
-                   loggingOptions =>
+            app
+                .UseSwaggerConfiguration(env, provider)
+                .UseSerilogRequestLogging(
+                    loggingOptions =>
                     {
                         loggingOptions.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
                         {
                             diagnosticContext.Set("TraceIdentifier", httpContext.TraceIdentifier);
                         };
                     })
-               .UseMiddleware<SerilogAddTraceIdentifierMiddleware>()
-               .UseExceptionHandlerMiddleware()
-               .UseRouting()
-               .UseEndpoints(endpoints => endpoints.MapControllers());
+                .UseMiddleware<SerilogAddTraceIdentifierMiddleware>()
+                .UseExceptionHandlerMiddleware()
+                .UseRouting()
+                .UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }
