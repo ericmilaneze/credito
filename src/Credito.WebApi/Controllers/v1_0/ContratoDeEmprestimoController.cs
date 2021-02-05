@@ -24,7 +24,7 @@ namespace Credito.WebApi.Controllers.v1_0
         public ContratoDeEmprestimoController(IMediator mediator) =>
             _mediator = mediator;
 
-        [HttpGet("{id}", Name = Globals.ROUTE_API_CONTRATOS_CRIAR_ROUTE_NAME)]
+        [HttpGet("{id}", Name = Globals.ROUTE_NAME_API_CONTRATOS_OBTER_POR_ID)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ResourceErrorModel), (int)HttpStatusCode.NotFound)]
         public async Task<ActionResult<ContratoDeEmprestimoModel>> ObterContratoPorId(Guid id,

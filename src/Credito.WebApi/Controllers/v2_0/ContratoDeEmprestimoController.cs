@@ -25,7 +25,7 @@ namespace Credito.WebApi.Controllers.v2_0
                                                               CancellationToken cancellationToken = default)
         {
             await _mediator.Send(cmd, cancellationToken);
-            return CreatedAtRoute(Globals.ROUTE_API_CONTRATOS_CRIAR_ROUTE_NAME,
+            return CreatedAtRoute(Globals.ROUTE_NAME_API_CONTRATOS_OBTER_POR_ID,
                                   new { cmd.Id },
                                   null);
         }

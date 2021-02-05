@@ -18,19 +18,18 @@ namespace Credito.WebApi.SwaggerConfigurations
 
         public void Configure(SwaggerGenOptions options)
         {
-            // add a swagger document for each discovered API version
-            // note: you might choose to skip or document deprecated API versions differently
             foreach (var description in _provider.ApiVersionDescriptions)
                 options.SwaggerDoc(description.GroupName, CreateInfoForApiVersion(description));
         }
 
         private OpenApiInfo CreateInfoForApiVersion(ApiVersionDescription description)
         {
-            var info = new OpenApiInfo()
-            {
-                Title = Globals.SWAGGER_API_NAME,
-                Version = description.ApiVersion.ToString(),
-            };
+            var info =
+                new OpenApiInfo()
+                {
+                    Title = Globals.SWAGGER_API_NAME,
+                    Version = description.ApiVersion.ToString(),
+                };
 
             if (description.IsDeprecated)
                 info.Description += " This API version has been deprecated.";
