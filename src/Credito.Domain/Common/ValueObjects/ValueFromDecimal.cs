@@ -15,6 +15,9 @@ namespace Credito.Domain.Common.ValueObjects
         public static decimal? ToDecimalNullable(ValueFromDecimal value) =>
             value?._valor;
 
+        public static double ToDouble(ValueFromDecimal value) =>
+            Convert.ToDouble(value?._valor ?? default(decimal));
+
         public override string ToString() =>
             _valor.ToString();
 

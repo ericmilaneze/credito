@@ -1,5 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
+using AutoFixture;
+using AutoFixture.Xunit2;
 using AutoMapper;
 using Credito.Application.v1_0.ContratoDeEmprestimo.CommandHandlers;
 using Credito.Application.v1_0.ContratoDeEmprestimo.Commands;
@@ -13,31 +15,14 @@ namespace Credito.Application.v1_0.Tests.ContratoDeEmprestimo.CommandHandlers
 {
     public class CmdHandler_Calcular_Contrato
     {
-        [Fact]
-        public async Task CdmHandler_CalcularContrato_Simples()
+        [Theory, AutoData]
+        public async Task CdmHandler_CalcularContrato_Simples(CalcularContratoCmd cmd)
         {
-            var cmd =
-                new CalcularContratoCmd
-                {
-                    ValorLiquido = 3000,
-                    QuantidadeDeParcelas = 24,
-                    TaxaAoMes = 5.00M,
-                    Tac = 6.00M,
-                    Iof = 10.00M,
-                    DiasDeCarencia = 30
-                };
+            var fixture = new Fixture();
+            
+            var returnThis = fixture.Create<ContratoDeEmprestimoModel>();
 
             var mapper = Substitute.For<IMapper>();
-            var returnThis = 
-                new ContratoDeEmprestimoModel
-                {
-                    ValorLiquido = cmd.ValorLiquido,
-                    QuantidadeDeParcelas = cmd.QuantidadeDeParcelas,
-                    TaxaAoMes = cmd.TaxaAoMes,
-                    Tac = cmd.Tac,
-                    Iof = cmd.Iof,
-                    DiasDeCarencia = cmd.DiasDeCarencia
-                };
             mapper.Map<ContratoDeEmprestimoModel>(Arg.Any<ContratoDeEmprestimoAggregate>())
                   .Returns(returnThis);
 

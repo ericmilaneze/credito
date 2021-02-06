@@ -11,6 +11,8 @@ namespace Credito.Domain.Tests.ContratoDeEmprestimo
 {
     public class Contrato_de_emprestimo
     {
+        private const decimal PRECISION = 0.000000001M;
+
         [Theory]
         [ContratosDataAttribute("contratos.json")]
         public void Criar_contrato(ContratoData data)
@@ -32,8 +34,35 @@ namespace Credito.Domain.Tests.ContratoDeEmprestimo
             contrato.TaxaAoDia.Should().BeEquivalentTo(new Percentual(data.TaxaAoDia));
             contrato.ValorCarencia.Should().BeEquivalentTo(new ValorMonetario(data.ValorCarencia));
             contrato.ValorFinanciado.Should().BeEquivalentTo(new ValorMonetario(data.ValorFinanciado));
-            contrato.ValorDaParcela.Should().BeEquivalentTo(new ValorMonetario(data.ValorDaParcela));
-            contrato.Parcelas.All(p => data.Parcelas.Contains(p));
+            ValorMonetario.ToDecimal(contrato.ValorDaParcela)
+                          .Should()
+                          .BeApproximately(data.ValorDaParcela, PRECISION);
+            contrato.Parcelas.Should().HaveCount(data.Prazo);
+
+            foreach (var parcela in contrato.Parcelas)
+            {
+                var parcelaExpected = data.Parcelas.Single(p => p.Numero == parcela.Numero);
+
+                ValorMonetario.ToDecimal(parcela.SaldoDevedorInicial)
+                              .Should()
+                              .BeApproximately(ValorMonetario.ToDecimal(parcelaExpected.SaldoDevedorInicial), PRECISION);
+
+                ValorMonetario.ToDecimal(parcela.Valor)
+                              .Should()
+                              .BeApproximately(ValorMonetario.ToDecimal(parcelaExpected.Valor), PRECISION);
+
+                ValorMonetario.ToDecimal(parcela.Principal)
+                              .Should()
+                              .BeApproximately(ValorMonetario.ToDecimal(parcelaExpected.Principal), PRECISION);
+
+                ValorMonetario.ToDecimal(parcela.Juros)
+                              .Should()
+                              .BeApproximately(ValorMonetario.ToDecimal(parcelaExpected.Juros), PRECISION);
+
+                ValorMonetario.ToDecimal(parcela.SaldoDevedorFinal)
+                              .Should()
+                              .BeApproximately(ValorMonetario.ToDecimal(parcelaExpected.SaldoDevedorFinal), PRECISION);
+            }
         }
     }
 }

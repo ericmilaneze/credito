@@ -27,6 +27,9 @@ namespace Credito.Domain.Common.ValueObjects
         public decimal ObterPercentual() =>
             _valor / 100;
 
+        public double ObterPercentualAsDouble() =>
+            Convert.ToDouble(_valor / 100);
+
         public override string ToString() =>
             $"{_valor:#,###.00}%";
 
@@ -63,7 +66,19 @@ namespace Credito.Domain.Common.ValueObjects
         public static decimal operator /(Percentual v1, decimal v2) =>
             v1.ObterPercentual() / v2;
 
-        public static decimal operator /(Percentual v1, double v2) =>
-            v1 / Decimal.Parse(v2.ToString());
+        // public static decimal operator /(Percentual v1, double v2) =>
+        //     v1 / Decimal.Parse(v2.ToString());
+
+        public static decimal operator /(Percentual v1, double v2)
+        {
+            try
+            {
+                return Convert.ToDecimal(v1.ObterPercentualAsDouble() / v2);
+            }
+            catch
+            {
+                return 0M;
+            }
+        }
     }
 }

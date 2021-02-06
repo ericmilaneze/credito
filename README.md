@@ -188,6 +188,7 @@ O template de saída do log da API (`appsettings.json`) tem o parâmetro `{Trace
 * xUnit
 * NSubstitute
 * Fluent Assertions
+* AutoFixture
 * DataAttribute (é criado um JsonFileDataAttribute)
 * Serilog
 * MongoDB
