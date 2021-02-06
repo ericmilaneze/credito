@@ -66,19 +66,7 @@ namespace Credito.Domain.Common.ValueObjects
         public static decimal operator /(Percentual v1, decimal v2) =>
             v1.ObterPercentual() / v2;
 
-        // public static decimal operator /(Percentual v1, double v2) =>
-        //     v1 / Decimal.Parse(v2.ToString());
-
-        public static decimal operator /(Percentual v1, double v2)
-        {
-            try
-            {
-                return Convert.ToDecimal(v1.ObterPercentualAsDouble() / v2);
-            }
-            catch
-            {
-                return 0M;
-            }
-        }
+        public static decimal operator /(Percentual v1, double v2) =>
+            Convert.ToDecimal(v1.ObterPercentualAsDouble() / v2);
     }
 }
