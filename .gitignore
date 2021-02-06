@@ -444,3 +444,9 @@ $RECYCLE.BIN/
 volumes/*
 coveragereport/*
 TestResults/*
+
+.cdk.staging
+cdk.out
+.depoy.cdk.aws-config
+.depoy.cdk.aws-config-*
+!.depoy.cdk.aws-config-ph
