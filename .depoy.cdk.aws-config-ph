@@ -1,3 +1,4 @@
 export CDK_DEPLOY_AWS_PROFILE=default
-export CDK_DEPLOY_AWS_ACCOUNT=account
+export CDK_DEPLOY_AWS_ACCOUNT=000000000000
 export CDK_DEPLOY_AWS_REGION=us-east-1
+export CDK_DEPLOY_VPC_ID=vpc-xxxxxxx

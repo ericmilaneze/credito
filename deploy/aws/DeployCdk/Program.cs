@@ -8,7 +8,9 @@ namespace DeployCdk
         public static void Main(string[] args)
         {
             var app = new App();
-            new CreditoAppStack(app, "CreditoAppStack", new StackProps { Env = GetEnvironment() });
+            new CreditoAppStack(app,
+                                Globals.DeployEnvironment.PutEnvNamePrefixInId("CreditoAppStack"),
+                                new StackProps { Env = GetEnvironment() });
             app.Synth();
         }
 

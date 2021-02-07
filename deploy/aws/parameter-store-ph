@@ -1,0 +1,4 @@
+#!/bin/bash
+
+export AWS_PROFILE=default
+export VPC_ID="vpc-xxxxxxx"

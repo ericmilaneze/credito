@@ -447,6 +447,11 @@ TestResults/*
 
 .cdk.staging
 cdk.out
+cdk.context.json
+
 .depoy.cdk.aws-config
 .depoy.cdk.aws-config-*
 !.depoy.cdk.aws-config-ph
+
+*/aws/parameter-store-*
+!*/aws/parameter-store-ph
