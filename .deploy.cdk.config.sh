@@ -27,6 +27,7 @@ PLACEHOLDER_CONFIG_FILE="./.depoy.cdk.aws-config-ph"
 
 if [ -z "$CDK_DEPLOY_NOT_LOCAL" ]; then
     echo "Deploying locally. Change the environment variable ${BLUE}\"CDK_DEPLOY_NOT_LOCAL\"${NC} to anything (true, 1, etc) when running this script not locally.${NC}"
+    export CDK_DEPLOY_REQUIRE_APPROVAL="any-change"
 
     if [ -f "$MAIN_CONFIG_FILE" ]; then
         echo "Reading main configuration file: $MAIN_CONFIG_FILE"
@@ -60,6 +61,7 @@ if [ -z "$CDK_DEPLOY_NOT_LOCAL" ]; then
     
     else
         echo "Deploying online. ${BLUE}\"CDK_DEPLOY_NOT_LOCAL\"${NC} set to ${BLUE}\"$CDK_DEPLOY_NOT_LOCAL\"${NC}"
+        export CDK_DEPLOY_REQUIRE_APPROVAL="never"
 fi
 
 

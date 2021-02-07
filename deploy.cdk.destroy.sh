@@ -9,7 +9,7 @@ ENV=$1
 rm -rf cdk.out
 
 
-cdk destroy --profile $CDK_DEPLOY_AWS_PROFILE
+cdk destroy --all --profile $CDK_DEPLOY_AWS_PROFILE
 
 
 rm -rf cdk.out

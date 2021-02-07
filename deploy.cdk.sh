@@ -9,9 +9,9 @@ ENV=$1
 rm -rf cdk.out
 
 
-cdk bootstrap --profile $CDK_DEPLOY_AWS_PROFILE
-cdk synth --profile $CDK_DEPLOY_AWS_PROFILE
-cdk deploy --profile $CDK_DEPLOY_AWS_PROFILE
+cdk bootstrap --all --profile=$CDK_DEPLOY_AWS_PROFILE
+cdk synth --all --profile=$CDK_DEPLOY_AWS_PROFILE
+cdk deploy --all --require-approval=$CDK_DEPLOY_REQUIRE_APPROVAL --profile=$CDK_DEPLOY_AWS_PROFILE
 
 
 rm -rf cdk.out

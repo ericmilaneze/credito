@@ -27,7 +27,7 @@ namespace DeployCdk.Env
             return new DeployEnvironment(envName, aws, vpcId);
         }
 
-        public string PutEnvNamePrefixInId(string id) =>
+        public string PutEnvNamePrefixWithDash(string id) =>
             $"{GetEnvName()}-{id}";
 
         public string GetEnvName() =>
