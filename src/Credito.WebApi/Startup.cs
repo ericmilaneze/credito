@@ -1,6 +1,5 @@
 using Credito.Application;
 using Credito.WebApi.Middlewares;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -28,13 +27,14 @@ namespace Credito.WebApi
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            };
+            JsonConvert.DefaultSettings = () => 
+                new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                };
 
             services
-                .ConfigureServices(Configuration)
+                .AddApplication(Configuration)
                 .AddMvcCore(
                     options =>
                     {
@@ -42,8 +42,6 @@ namespace Credito.WebApi
                     })
                 .AddDataAnnotations()
                 .AddApiExplorer()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(typeof(AppDependencyInjection).Assembly))
-                .Services
                 .AddVersioning()
                 .AddDefaultErrorResponsesConfiguration()
                 .AddSwagger();
