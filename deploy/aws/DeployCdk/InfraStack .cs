@@ -13,20 +13,21 @@ namespace DeployCdk
             var vpc = Vpc.FromLookup(this, "VPC",
                 new VpcLookupOptions
                 {
-                    VpcId = Globals.DeployEnvironment.VpcId
+                    VpcId = Globals.GetDeployEnvironment(this).VpcId
                 });
 
             var cluster = new Cluster(this, "Cluster",
                 new ClusterProps
                 {
                     Vpc = vpc,
-                    ClusterName = Globals.DeployEnvironment.PutEnvNamePrefixWithDash("Cluster")
+                    ClusterName = Globals.GetDeployEnvironment(this).PutEnvNamePrefixWithDash("Cluster")
                 });
 
             var albSecurityGroup = new SecurityGroup(this, "AlbSecurityGroup",
                 new SecurityGroupProps
                 {
-                    Vpc = vpc
+                    Vpc = vpc,
+                    AllowAllOutbound = true
                 });
 
             albSecurityGroup.AddIngressRule(Peer.AnyIpv4(), Port.Tcp(80));
@@ -45,10 +46,10 @@ namespace DeployCdk
             var webApiServiceSecurityGroup = new SecurityGroup(this, "WebApiServiceSecurityGroup",
                 new SecurityGroupProps
                 {
-                    Vpc = vpc
+                    Vpc = vpc,
+                    AllowAllOutbound = true
                 });
 
-            albSecurityGroup.AddEgressRule(webApiServiceSecurityGroup, Port.Tcp(80));
             webApiServiceSecurityGroup.AddIngressRule(albSecurityGroup, Port.Tcp(80));
 
             var appListener = alb.AddListener("AppListener",
@@ -67,21 +68,21 @@ namespace DeployCdk
             new CfnOutput(this, "ClusterName",
                 new CfnOutputProps
                 {
-                    ExportName = Globals.DeployEnvironment.PutEnvNamePrefixWithDash("ClusterName"),
+                    ExportName = Globals.GetDeployEnvironment(this).PutEnvNamePrefixWithDash("ClusterName"),
                     Value = cluster.ClusterName
                 });
 
             new CfnOutput(this, "WebApiServiceSecurityGroupId",
                 new CfnOutputProps
                 {
-                    ExportName = Globals.DeployEnvironment.PutEnvNamePrefixWithDash("WebApiServiceSecurityGroupId"),
+                    ExportName = Globals.GetDeployEnvironment(this).PutEnvNamePrefixWithDash("WebApiServiceSecurityGroupId"),
                     Value = albSecurityGroup.SecurityGroupId
                 });
 
             new CfnOutput(this, "AppListenerArn",
                 new CfnOutputProps
                 {
-                    ExportName = Globals.DeployEnvironment.PutEnvNamePrefixWithDash("AppListenerArn"),
+                    ExportName = Globals.GetDeployEnvironment(this).PutEnvNamePrefixWithDash("AppListenerArn"),
                     Value = appListener.ListenerArn
                 });
         }

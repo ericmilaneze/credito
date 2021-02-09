@@ -6,7 +6,7 @@ ENV=$1
 . ./.deploy.cdk.config.sh $ENV
 
 
-cdk destroy \
+cdk bootstrap \
     --require-approval=$CDK_DEPLOY_REQUIRE_APPROVAL \
     --profile=$CDK_DEPLOY_AWS_PROFILE \
     -c CDK_DEPLOY_ENV=$CDK_DEPLOY_ENV \
@@ -14,6 +14,3 @@ cdk destroy \
     -c CDK_DEPLOY_AWS_REGION=$CDK_DEPLOY_AWS_REGION \
     -c CDK_DEPLOY_VPC_ID=$CDK_DEPLOY_VPC_ID \
     --all
-
-
-rm -rf cdk.out
