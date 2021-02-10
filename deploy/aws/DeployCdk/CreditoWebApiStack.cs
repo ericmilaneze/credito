@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using System.IO;
 using Amazon.CDK;
 using Amazon.CDK.AWS.EC2;
 using Amazon.CDK.AWS.ECS;
 using Amazon.CDK.AWS.ElasticLoadBalancingV2;
 using Amazon.CDK.AWS.Logs;
+using Amazon.CDK.AWS.SSM;
 
 namespace DeployCdk
 {
@@ -30,7 +32,7 @@ namespace DeployCdk
                         new Amazon.CDK.AWS.ElasticLoadBalancingV2.HealthCheck
                         {
                             Enabled = true,
-                            Path = "/api/credito*",
+                            Path = "/api/credito/_monitor/shallow",
                             Protocol = Amazon.CDK.AWS.ElasticLoadBalancingV2.Protocol.HTTP,
                             Port = "traffic-port",
                             UnhealthyThresholdCount = 2,
@@ -58,7 +60,7 @@ namespace DeployCdk
                     Conditions =
                         new ListenerCondition[]
                         {
-                            ListenerCondition.PathPatterns(new string[] { "/api/credito/_monitor/shallow" })
+                            ListenerCondition.PathPatterns(new string[] { "/api/credito*" })
                         },
                     Priority = 100,
                     TargetGroups = new ApplicationTargetGroup[] { creditoWebApiTargetGroup }
@@ -95,7 +97,19 @@ namespace DeployCdk
                         {
                             File = "src/Credito.WebApi/Dockerfile"
                         }),
-                    Logging = creditoWebApiLogging
+                    Logging = creditoWebApiLogging,
+                    Environment = 
+                        new Dictionary<string, string>()
+                        {
+                            ["CreditoDatabase__ConnectionString"] = 
+                                StringParameter.ValueFromLookup(
+                                    this,
+                                    $"/{Globals.GetDeployEnvironment(this).EnvName}/credito/web-api/db/connection-string"),
+                            ["CreditoDatabase__DatabaseName"] =
+                                StringParameter.ValueFromLookup(
+                                    this,
+                                    $"/{Globals.GetDeployEnvironment(this).EnvName}/credito/web-api/db/database-name")
+                        }
                 });
 
             creditoWebApiContainer.AddPortMappings(

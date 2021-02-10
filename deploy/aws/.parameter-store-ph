@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export AWS_PROFILE=default
+export CREDITO_DB_CONNECTION_STRING="mongodb://eric:pass@localhost:27017"
+export CREDITO_DB_DATABASE_NAME="local"

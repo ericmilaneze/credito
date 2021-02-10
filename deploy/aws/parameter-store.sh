@@ -10,7 +10,7 @@ NC='\033[0m' # No Color
 ENV=$1
 
 if [ -z "$ENV" ]; then
-    echo "${YELLOW}Environment not set. Default (\"dev\") will be used. ${NC}"
+    echo "${YELLOW}Environment not set. Default (\"dev\") will be used.${NC}"
     ENV=dev
 
     else
@@ -18,8 +18,8 @@ if [ -z "$ENV" ]; then
 fi
 
 
-ENV_CONFIG_FILE="./parameter-store-$ENV"
-PLACEHOLDER_CONFIG_FILE="./parameter-store-ph"
+ENV_CONFIG_FILE="./.parameter-store-$ENV"
+PLACEHOLDER_CONFIG_FILE="./.parameter-store-ph"
 
 
 if [ -f "$ENV_CONFIG_FILE" ]; then
@@ -49,8 +49,15 @@ fi
 
 
 aws ssm put-parameter \
-    --name /$ENV/env \
-    --value "vpc=$VPC_ID" \
-    --type StringList \
+    --name /$ENV/credito/web-api/db/connection-string \
+    --value "$CREDITO_DB_CONNECTION_STRING" \
+    --type String \
+    --profile $AWS_PROFILE \
+    --overwrite
+
+aws ssm put-parameter \
+    --name /$ENV/credito/web-api/db/database-name \
+    --value "$CREDITO_DB_DATABASE_NAME" \
+    --type String \
     --profile $AWS_PROFILE \
     --overwrite

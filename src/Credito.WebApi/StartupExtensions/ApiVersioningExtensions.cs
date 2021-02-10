@@ -9,9 +9,12 @@ namespace Credito.WebApi.StartupExtensions
 {
     public static class ApiVersioningExtensions
     {
+        public static IServiceCollection AddVersioning(this IServiceCollection services) =>
+            services.AddApiVersioning(GetApiVersioningSetupAction())
+                    .AddVersionedApiExplorer(GetVersionedApiSetupAction());
+
         public static IServiceCollection AddVersioning(this IMvcCoreBuilder mvcBuilder) =>
-            mvcBuilder.Services.AddApiVersioning(GetApiVersioningSetupAction())
-                               .AddVersionedApiExplorer(GetVersionedApiSetupAction());
+            mvcBuilder.Services.AddVersioning();
 
         private static Action<ApiExplorerOptions> GetVersionedApiSetupAction() =>
             options =>
