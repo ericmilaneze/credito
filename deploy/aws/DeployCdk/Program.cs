@@ -7,18 +7,24 @@ namespace DeployCdk
     {
         public static void Main(string[] args)
         {
-            var app = new App();
+             var app = new App();
+
+             var vpcStack = 
+                new VpcStack(app,
+                             Globals.GetDeployEnvironment(app).PutEnvNamePrefixWithDash(nameof(VpcStack)),
+                             new StackProps { Env = GetEnvironment() });
 
             var infraStack = 
                 new InfraStack(app,
                                Globals.GetDeployEnvironment(app).PutEnvNamePrefixWithDash(nameof(InfraStack)),
-                               new StackProps { Env = GetEnvironment() });
+                               new CustomStackProps { Env = GetEnvironment(), Vpc = vpcStack.Vpc });
 
             var creditoWebApiStack = 
                 new CreditoWebApiStack(app,
-                                    Globals.GetDeployEnvironment(app).PutEnvNamePrefixWithDash(nameof(CreditoWebApiStack)),
-                                    new StackProps { Env = GetEnvironment() });
+                                       Globals.GetDeployEnvironment(app).PutEnvNamePrefixWithDash(nameof(CreditoWebApiStack)),
+                                       new CustomStackProps { Env = GetEnvironment(), Vpc = vpcStack.Vpc });
 
+            infraStack.AddDependency(vpcStack);
             creditoWebApiStack.AddDependency(infraStack);
             
             app.Synth();

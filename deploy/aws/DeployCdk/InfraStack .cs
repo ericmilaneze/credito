@@ -7,14 +7,10 @@ namespace DeployCdk
 {
     public class InfraStack : Stack
     {
-        internal InfraStack(Construct scope, string id, IStackProps props = null)
+        internal InfraStack(Construct scope, string id, CustomStackProps props = null)
             : base(scope, id, props)
         {
-            var vpc = Vpc.FromLookup(this, "VPC",
-                new VpcLookupOptions
-                {
-                    VpcId = Globals.GetDeployEnvironment(this).VpcId
-                });
+            var vpc = props.Vpc;
 
             var cluster = new Cluster(this, "Cluster",
                 new ClusterProps

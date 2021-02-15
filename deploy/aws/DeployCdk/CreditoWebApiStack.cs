@@ -11,14 +11,10 @@ namespace DeployCdk
 {
     public class CreditoWebApiStack : Stack
     {
-        internal CreditoWebApiStack(Construct scope, string id, IStackProps props = null)
+        internal CreditoWebApiStack(Construct scope, string id, CustomStackProps props = null)
             : base(scope, id, props)
         {
-            var vpc = Vpc.FromLookup(this, "VPC",
-                new VpcLookupOptions
-                {
-                    VpcId = Globals.GetDeployEnvironment(this).VpcId
-                });
+            var vpc = props.Vpc;
 
             var creditoWebApiTargetGroup = new ApplicationTargetGroup(this, "CreditoWebApiTargetGroup",
                 new ApplicationTargetGroupProps
@@ -135,9 +131,10 @@ namespace DeployCdk
                     TaskDefinition = creditoWebApiTaskDefinition,
                     DesiredCount = 1,
                     CircuitBreaker = new DeploymentCircuitBreaker { Rollback = true },
-                    AssignPublicIp = true,
+                    AssignPublicIp = false,
                     HealthCheckGracePeriod = Duration.Seconds(60),
-                    SecurityGroups = new ISecurityGroup[] { webApiServiceSecurityGroup }
+                    SecurityGroups = new ISecurityGroup[] { webApiServiceSecurityGroup },
+                    VpcSubnets = new SubnetSelection { SubnetType = SubnetType.PRIVATE }
                 });
 
             creditoWebApiService.AttachToApplicationTargetGroup(creditoWebApiTargetGroup);
